@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+ <meta charset="utf-8">
+
+ <title>Hands-on Workshop</title>
+
+ <meta name="description" content="Apache Kafka">
+ <meta name="author" content="Kiruthika Samapathy">
+
+ <meta name="apple-mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+ <link rel="stylesheet" href="css/reveal.css">
+ <link rel="stylesheet" href="css/theme/thoughtworks.css" id="theme">
+
+ <!-- Code syntax highlighting -->
+ <link rel="stylesheet" href="lib/css/zenburn.css">
+
+ <!-- Printing and PDF exports -->
+ <script>
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+  document.getElementsByTagName('head')[0].appendChild(link);
+ </script>
+
+</head>
+
+<body>
+
+ <div class="reveal">
+
+  <!-- Any section element inside of this container is displayed as a slide -->
+  <div class="slides">
+
+   <section class="title">
+    <h1>Apache Kafka</h1>
+    <h3>High-throughput messaging system as a distributed commit log</h3>
+    <aside class="notes">
+     <ul>
+      <li> publish-subscribe messaging designed as a distributed commit log </li>
+     </ul>
+    </aside>
+   </section>
+
+   <section class="title" data-background="images/data_background.jpg">
+    <aside class="notes">
+     <ul>
+      <li> High volume of events/activities to be recorded (100k+/sec) </li>
+      <li> messages/events to be delivered at least once
+       <li> mix of online and batch consumers</li>
+       <li> consumers at different pace</li>
+       <li> Multiple consumers per message, where in a typical message queue you will be forced to use a queue per consumer</li>
+       <li> there by duplicating all the data</li>
+       <li> Heavy message queue affects over all throughput</li>
+       <li> Mine is a data-driven company; Events like user activities drive the business and events are becoming first class citizens </li>
+       <li> no real-time data processing tool is complete without Kafka integration</li>
+       <br>
+       <li> your message queue performance dips severly whenever it is backed up beyond what could be kept in memory </li>
+     </ul>
+    </aside>
+   </section>
+
+   <section>
+    <h2>Decoupled data pipeline</h2>
+    <br>
+    <img width="1400" data-src="images/kafka_overview.jpg" alt="Kafka overview" style="border:0">
+    <aside class="notes">
+     <ul>
+      <li> it is a quite simple abstraction</li>
+      <li> Producers send messages to Kafka clusters</li>
+      <li> Kafka cluster holds these messages for specified time</li>
+      <li> Consumers read content from cluster on their own pace</li>
+      <li> producer need not know anything abt downstream pipeline</li>
+     </ul>
+    </aside>
+   </section>
+
+   <section>
+    <h2>How is Kafka different?</h2>
+    <br>
+    <ul>
+     <li>Explicitly distributed</li>
+     <li>Partitioned</li>
+     <li>Replicated</li>
+     <li>Dumb pipelines</li>
+    </ul>
+    <aside class="notes">
+     <ul>
+      <li> central commit log and all published messages are retained for a configurable period of time </li>
+      <li> <b> distributed </b> kakfa is a cluster of machines called as brokers </li>
+      <li> kafka assumes that producers, brokers and consumers are all spread across multiple machines</li>
+      <li> Prodcers, brokers and consumers run as a logical group with the help of Zookeeper</li>
+      <br>
+      <li> <b> partitioned </b> helps to scale easily </li>
+      <li> <b> replicated </b> which makes the system highly available and predictable </li>
+      <br>
+      <li> State information as what is being consumed is part of consumer and not data pipeline</li>
+
+
+      <br>
+      <li> break apart your entire infrastructure</li>
+      <li> all your systems can dump data into it, why because it is cheap and easy to scale and predictable</li>
+     </ul>
+    </aside>
+   </section>
+
+   <!-- <section>
+    <h2>Kafka dictionary</h2>
+    <br>
+    <ul>
+     <li>Broker - Kafka Server</li>
+     <li>Producer</li>
+     <li>Consumer</li>
+     <li>Topics - Multiple partitions - Partitions replicated </li>
+     <li>Broker leader - Broker followers - ISR </li>
+    </ul>
+    <aside class="notes">
+     <ul>
+      <li> leader - current broker in-charge of the partition</li>
+      <li> all producers to the given partition talk to the broker leader</li>
+      <li> replication - broker consumes from leader</li>
+      <li> list of broker replicas - that are upto date with the leader</li>
+     </ul>
+    </aside>
+   </section> -->
+
+   <section>
+    <h2>Brokers</h2>
+    <img width="900" data-src="images/topics_partitions_overview1.jpg" alt="Kafka overview" style="border:0">
+    <aside class="notes">
+     <ul>
+      <li> topic is the virtual category/feed, it is the key abstraction</li>
+      <li> For each topic, kafka maintains partitioned log</li>
+      <li> Kafka topic is a append-only or write-ahead log</li>
+      <li> so ordered is guaranteed at the partition level</li>
+     </ul>
+    </aside>
+   </section>
+
+   <section>
+    <h2>Replicated</h2>
+    <img width="900" data-src="images/topics_partitions_overview2.jpg" alt="Kafka overview" style="border:0">
+   </section>
+
+   <section>
+    <h2>Partition leader</h2>
+    <img width="900" data-src="images/topics_partitions_overview3.jpg" alt="Kafka overview" style="border:0">
+    <aside class="notes">
+     <ul>
+      <li> Each partition has one broker which acts as the "leader" and zero or more servers which act as “followers”, which replicates the leader </li>
+      <li> If the leader fails, one of the followers will automatically become the new leader. </li>
+      <li> Each server acts as a leader for some of its partitions and a follower for others so load is well balanced within the cluster. </li>
+      <li> producer sends data directly to the broker that is that is the partition leader </li>
+      <li> so how will the producer know that? all kafka nodes will return metadata saying which servers are alive, partition leaders info </li>
+     </ul>
+    </aside>
+   </section>
+
+   <section>
+    <h2>Partitioned</h2>
+    <img width="900" data-src="images/topics_partitions_overview4.jpg" alt="Kafka overview" style="border:0">
+    <aside class="notes">
+     <ul>
+      <li> partitions are log files on the disk</li>
+      <li> partitioning allow the log to scale beyond a size that will fit on a single server</li>
+     </ul>
+    </aside>
+   </section>
+
+   <section>
+    <h2>Overview</h2>
+    <img width="800" data-src="images/topics_partitions_overview5.jpg" alt="Kafka overview" style="border:0">
+    <aside class="notes">
+     <ul>
+      <li> So, is kafka a queueing system or publsh-subscribe/broadcast system? </li>
+      <li> it has single consumer abstraction </li>
+      <li> Consumers label themselves with a consumer group name, and each message published to a topic is delivered to one consumer instance within each subscribing consumer group.</li>
+      <li> If all the consumer instances have the same consumer group, then this works just like a traditional queue balancing load over the consumers.</li>
+      <li> If all the consumer instances have different consumer groups, then this works like publish-subscribe and all messages are broadcast to all consumers.</li>
+     </ul>
+    </aside>
+   </section>
+
+   <section>
+    <h2>Topic and Partitions</h2>
+    <img width="1000" data-src="images/topics_partitions_detail.jpg" alt="Kafka overview" style="border:0">
+    <aside class="notes">
+     <ul>
+      <li></li>
+      <li> Every record is a key-value pair, key determines the partition</li>
+      <li> key could be computed randomly/producer might specify the key explicitly</li>
+      <li> every record has an offset number - consumer uses this offset to determine its position</li>
+      <li> Messages are simply byte arrays and the developers can use them to store any object in any format – with String, JSON, and Avro the most common</li>
+      <li> consumer specifies offset in the log with each request and receives back a chunk of log beginning from that position - better control and can can re-consume. </li>
+     </ul>
+    </aside>
+   </section>
+
+   <section>
+    <h2>Topic and Partitions</h2>
+    <img width="800" data-src="images/commit_log.jpg" alt="Kafka overview" style="border:0">
+    <aside class="notes">
+     <ul>
+      <li> <b> Producers </b> </li>
+      <li> lots of other customization options</li>
+      <li>Asynchronous/Synchronous send</li>
+      <li>Batching</li>
+      <li>Compression</li>
+      <li> <b> consumers </b> </li>
+      <li> How is it different from other messaging queues? In a typical messaging system, queue will push messages to consumers and maintain all other associated metadata</li>
+      <li> Each consumer process belongs to a consumer group</li>
+      <li> each message is delivered to exactly one process within every consumer group</li>
+      <li> In an ideal world, there will be multiple logical consumer groups, each consisting of a cluster of consuming machines</li>
+      <li> In the case of large data that no matter how many consumers a topic has, a message is stored only a single time.</li>
+      <li> Here, consumers pull messsages</li>
+     </ul>
+    </aside>
+   </section>
+
+   <section>
+    <h2>Overview</h2>
+    <img width="800" data-src="images/topics_partitions_overview6.jpg" alt="Kafka overview" style="border:0">
+      </section>
+
+   <section data-background="images/usecases_wordcloud.jpg">
+    <h2>Where to use?</h2>
+    <br>
+    <ul>
+     <li>Real time event/log aggregations</li>
+     <li>Speed layer in the Lambda architecture</li>
+     <li>Real time news feeds/metrics/alerts/monitoring</li>
+     <li>Data loading for data processing systems</li>
+     <li>Event sourcing</li>
+     <li>Commit logs</li>
+    </ul>
+    <aside class="notes">
+     <ul>
+      <li> no real-time data processing tool is complete without Kafka integration</li>
+      <li> best suited when multiple consumers, as that is what it is best optimized for</li>
+      <li> commit logs - database state capture</li>
+      <br>
+      <li> Because Kafka topics are very cheap from a performance and overhead standpoint,</li>
+      <li> it’s possible for us to create as many queues as we want, scaled to the performance we want</li>
+      <li> and optimizing resource utilization across the system. Because they can be created dynamically,</li>
+      <li> we can make our business rules very flexible.</li>
+      <li> <b> event sourcing </b> style of application design where state changes are logged as a time-ordered sequence of records </li> <br>
+
+      <li> which is fast becoming the centre of gravity for data logging </li>
+      <li> all your systems can dump data into it, why because it is cheap and easy to scale and predictable</li>
+     </ul>
+    </aside>
+   </section>
+
+   <!-- <section>
+    <h2>yes/no</h2>
+    <br>
+    <img width="800" data-src="images/pros_cons.jpg" alt="Kafka overview" style="border:0">
+    <aside class="notes">
+     <ul>
+      <b> pros </b>
+      <li> Handles peak bandwidth - 20Gbps</li>
+      <li> Dynamically configurable - easy to add more brokers/topics/consumers </li>
+      <li> All topics are available for reading by any number of subscribers, and additional subscribers have very low overhead. </li>
+      <li> Multiple clients can process data in parallel and its own pace </li>
+      <li> Any system can hook to it and consume data with minimal integration work </li>
+      <li> Both broker and consumer group membership is fully dynamic, which allows us to dynamically add nodes to the groups and have load automatically rebalanced without any static cluster configuration. </li>
+       <li> move the cleanliness upstream </li>
+       <li> thousands of terrabytes of data</li>
+       <li> millions of requests per second</li>
+      <br>
+      <b> cons </b>
+      <li> <b> zookeeper </b> Kafka will not work without zookeeper - CAP theorem CP system - unless a quorum of nodes are up (2 of 3, or 3 of 5), the whole system is unavailable</li>
+      <li> Kafka 0.8 requires that the client have access to the same ZooKeeper instance as the server</li>
+      <li> <b> Java clients </b> Non-java based clients are not as great as Java ones, especially with Kafka 0.8</li>
+     </ul>
+    </aside>
+   </section>
+
+   <section>
+    <h2>Eco system</h2>
+    <br>
+    <img width="1500" data-src="images/kafka_plus.jpg" alt="Kafka overview" style="border:0">
+    <aside class="notes">
+     <ul>
+      <li> Storm - on top of one of these solutions to add computation, filtering, querying, on your streams.</li>
+      <li> Cassandra - as a queryable cache</li>
+      <li> Samza - </li>
+      <li> Spark streming - </li>
+      <li> AWS Kinesis - similar to this </li>
+     </ul>
+    </aside>
+   </section> -->
+
+   <!-- END OF TUTORIAL SLIDES -->
+
+  </div>
+
+ </div>
+
+ <script src="lib/js/head.min.js"></script>
+ <script src="js/reveal.js"></script>
+
+ <script>
+  // Full list of configuration options available at:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+   controls: true,
+   progress: true,
+   history: true,
+   center: true,
+   hideAddressBar: true,
+
+   transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+   // Optional reveal.js plugins
+   dependencies: [{
+    src: 'lib/js/classList.js',
+    condition: function() {
+     return !document.body.classList;
+    }
+   }, {
+    src: 'plugin/markdown/marked.js',
+    condition: function() {
+     return !!document.querySelector('[data-markdown]');
+    }
+   }, {
+    src: 'plugin/markdown/markdown.js',
+    condition: function() {
+     return !!document.querySelector('[data-markdown]');
+    }
+   }, {
+    src: 'plugin/highlight/highlight.js',
+    async: true,
+    condition: function() {
+     return !!document.querySelector('pre code');
+    },
+    callback: function() {
+     hljs.initHighlightingOnLoad();
+    }
+   }, {
+    src: 'plugin/zoom-js/zoom.js',
+    async: true
+   }, {
+    src: 'plugin/notes/notes.js',
+    async: true
+   }]
+  });
+ </script>
+
+</body>
+
+</html>

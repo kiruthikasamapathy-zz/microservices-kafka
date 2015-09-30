@@ -1,0 +1,3165 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Hands-on Workshop</title>
+
+    <meta name="description" content="Continuously Delivery Microservices using Docker and Friends">
+    <meta name="author" content="Clarence Bakirtzidis, Kiruthika Samapathy">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/thoughtworks.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <div class="footer">
+        Copyright (c) ThoughtWorks 2015.  Provided for personal use only and not to be copied or distributed.
+       </div>
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+
+        <section class="title">
+          <h1>Hands-On Workshop</h1>
+          <h3>Continuously Delivering Microservices using Docker and Friends</h3>
+        </section>
+
+        <section>
+          <h2> Topics </h2>
+          <table style="font-size:0.8em">
+            <thead class="purple">
+              <tr>
+                <th>
+                </th>
+                <th>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong><a href="#/getting-started">Getting Started</a></strong></td>
+                <td>Check your workshop VM is configured properly</td>
+              </tr>
+              <tr>
+                <td><strong><a href="#/module-1">Module 1</a></strong></td>
+                <td>Introduction to the Monolith and Continuous Delivery</td>
+              </tr>
+              <tr>
+                <td><strong><a href="#/module-2">Module 2</a></strong></td>
+                <td>Meet our first microservice and Docker</td>
+              </tr>
+              <tr>
+                <td><strong><a href="#/module-3">Module 3</a></strong></td>
+                <td>Our second microservice and Consumer-Driven Contracts (CDCs)</td>
+              </tr>
+              <tr>
+                <td><strong><a href="#/module-4">Module 4</a></strong></td>
+                <td>Multi-host deployment and service discovery</td>
+              </tr>
+              <tr>
+                <td><strong><a href="#/module-5">Module 5</a></strong></td>
+                <td>Introduction to Operational concerns</td>
+              </tr>
+              <tr>
+                <td><strong><a href="#/module-6">Module 6</a></strong></td>
+                <td>Next steps, Future trends, Q&amp;A </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="title">
+          <h1>Workshop Journey</h1>
+          <h3>Why are we here? What are we going to do?</h3>
+        </section>
+
+        <section>
+          <h2>Who are we?</h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-musik-shop.jpg" alt="Just getting started with Single monolithic Shop-App" style="border:0">
+          <aside class="notes">
+            assume & imagine - part of music <br>
+            digital team here - business <br>
+            half century <br>
+            bonus <br> <br>
+            retro <br>
+            large app - teams changed - features <br>
+            small change - across stack <br><br>
+            <strong>people - capable - disruptive</strong> <br><br>
+            split teams - but single app <br>
+            resolving conflicts - understanding feature toggles <br>
+            <strong>tech debt</strong> growing - pockets addressed diff language <br>
+            <strong>performance</strong> & scaling issues - predominant - single point auth<br>
+            plans to migrate to <strong>cloud</strong> <br>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Our journey today... </h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-01.jpg" alt="Just getting started with Single monolithic Shop-App" style="border:0">
+          <aside class="notes">
+            high level journey - musci <br>
+            how we can do with help of people in this room <br><br>
+            <strong> back to reality  - T</strong> <br>
+            covering lots of stuff - over all concepts <br><br>
+            parking log <br><br>
+            hands -on - feel free to ask question - thats how you ll get most benifit <br>
+            do not feel intimidated <br>
+          </aside>
+        </section>
+
+        <section class="title">
+          <h1>Setup Your Box</h1>
+          <h3>To Build, Test, Run and Deploy Microservices using Docker</h3>
+        </section>
+
+         <section>
+          <h2>Setup workshop VM<br>Install Prerequisites from USB drive</h2><br>
+          <ul>
+            <li>Install <code>VirtualBox-4.3.26</code> from <code>installers</code> directory</li>
+            <li>Install <code>vagrant_1.6.5</code> from <code>installers</code> directory</li>
+            <li>If you are running <strong>Windows:</strong></li>
+              <ul>
+                <li>Install <code>Git-1.9.5</code> from <code>installers</code> directory.
+                <li>Use default locations suggested by installers.</li>
+                <li>Restart your machine when requested by installers.</li>
+              </ul>
+            <li>Copy content of usb-stick to your computer<br> </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Open up the slides</h2><br>
+          <ul>
+            <li><span style="color: red">Important*</span> - If using Windows, unzip from Git Bash</li><br>
+            <li>Open file <code>index.html</code> found in <code>workshop-dist/slides/</code> directory on your computer<br></li><br>
+            <li>You should see these instructions in your browser<br>and be able to copy and paste commands if needed</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Run the Workshop VM</h2><br>
+          <ul>
+            <li>Start up the workshop VM<br> from <code>workshop-dist/box</code> directory on your machine</li>
+            <pre><code>workshop-dist/box$ vagrant box add workshop workshop.box</code></pre>
+            <pre><code>workshop-dist/box$ vagrant up</code></pre>
+            <pre><code>workshop-dist/box$ vagrant ssh</code></pre>
+            <li>If you are using Windows run <code>Git Bash</code></li>
+              <pre><code content-trim class="sh">$ cd 'workshop-dist\box\'
+workshop-dist\box$ vagrant box add workshop workshop.box
+workshop-dist\box$ vagrant up
+workshop-dist\box$ vagrant ssh</code></pre>
+          </ul>
+        </section>
+
+        <section class="title">
+          <h1>Hands-on<br> Sessions Overview</h1>
+          <h3>Introduction of your playground and the rules</h3>
+        </section>
+
+        <section>
+          <h2>The Playground Overview</h2>
+          <img width="960"
+                data-src="images/aa-overview-playground.jpg"
+                alt="playground overview" style="border:0">
+        </section>
+
+        <section>
+          <h2>Rules of hands-on sessions</h2>
+        </section>
+
+        <section>
+          <h2> Glossary </h2>
+          <table style="font-size:0.7em">
+            <thead class="purple">
+              <tr>
+                <th>
+                </th>
+                <th>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><pre><code class="shell">$ vagrant up</code></pre> </td>
+                <td>Command to run on your machine from <code>workshop-dist/box</code> directory to start up workshop VM</td>
+              </tr>
+              <tr>
+                <td><pre><code class="shell">$ vagrant ssh</code></pre> </td>
+                <td>Command to run on your machine from <code>workshop-dist/box</code> directory to log into workshop vm.
+                  This should be called after starting the vm. All consequent commands run on the workshop VM</td>
+              </tr>
+              <tr>
+                <td><pre><code class="shell"> vagrant@workshop:~$</code></pre> </td>
+                <td>Prompt displayed when running commands on microservices VM</td>
+              </tr>
+              <tr>
+                <td><code>/home/vagrant/topics/{state}/{topic_name}</code></td>
+                <td>Topic builder scripts for start/finish state on workshop VM</td>
+              </tr>
+              <tr>
+                <td>
+                  <pre><code class="shell">~$ cd /home/vagrant/topics/{state}/{topic_name}</code></pre>
+                  <pre><code class="shell">{topic_name}$ ./up.sh</code></pre> </td>
+                <td>Command to configure a topic in the start or finish state on workshop VM</td>
+              </tr>
+              <tr>
+                <td><code class="sh">/home/vagrant/workspace/...</code></td>
+                <td>Source code repositories on the workshop VM</em></td>
+              </tr>
+              <tr>
+                <td><code class="sh">{dir-on-your-machine}/my-workspace/...</code></td>
+                <td>Source code repositories on your machine. This directory is synced with workshop VM</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section>
+          <h2>Git repositories on your VM</h2>
+          <ul>
+            <li>Some exercises will require modifying files in your local <a href="http://git-scm.com/book/en/v2/Getting-Started-About-Version-Control" target="_blank">Git</a> workspaces</li>
+            <li>On your VM these will be under: <pre><code>/home/vagrant/workspace/</code></pre></li>
+            <li>On your computer these will be under: <pre><code>{dir-on-your-machine}/my-workspace/</code></pre></li>
+            <li>Always commit and push changes from your VM (not from your computer)</li>
+            <li>Example of making changes in the VM terminal:<pre><code class="sh">echo "Hello world" > my-new-file.txt
+git status    # See new/modified files
+git add my-new-file.txt
+git commit -m "Some useful message about the change"
+git push      # Submit change to the remote repository (hosted your VM)</code></pre></li>
+            <li>When you push changes, Go-CD will detect the change a kick off a build (it periodically polls the git repositories for changes)</li>
+          </ul>
+        </section>
+
+        <section id="getting-started" class="title">
+          <h1>Getting Started</h1>
+          <h3>Check your workshop VM is configured properly</h3>
+        </section>
+
+        <section>
+          <h2>Run the getting started topic </h2><br>
+          <ul>
+            <li>Log into workshop VM<br>
+            <li>If you are using Windows run <code>Git Bash</code></li>
+            <pre><code>workshop-dist/box$ vagrant ssh</code></pre></li>
+            <br>
+            <li>Run the <code>getting_started</code> topic script<br>
+              <pre><code>vagrant@workshop:~$ cd ~/topics/start/getting_started</code></pre>
+              <pre><code>vagrant@workshop:~$ ./up.sh</code></pre>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Verify CD Pipeline<br/>is working</h2><br>
+          <ul>
+            <li> Open a browser to the Go-CD dashboard<br/>on your machine:
+              <a href="http://localhost:8153" target="_blank"><code>http://localhost:8153</code></li></a>
+
+            <img width="680"
+                  data-src="images/aa-getting-started-pipeline-anno.jpg"
+                  alt="go-cd dashboard - getting started" style="border:0">
+          </ul>
+        </section>
+
+        <section>
+          <h2>View the build results</h2><br>
+          <ul>
+            <li>Click the <strong>commit</strong> stage</li>
+            <li>Click the <strong>build</strong> job</li>
+            <li>Look for "<code>Hello, world</code>" in the console output</li>
+            <ol>
+              <li>Click on Green bar in the pipeline</li>
+              <li>Click on Build</li>
+              <li>Select console tab</li>
+            </ol>
+            <li>Your VM is now working properly</li>
+          </ul>
+        </section>
+
+        <!-- Module 1 -->
+
+        <section id="module-1" class="title">
+          <h1>Module 1</h1>
+          <h3>Introduction to the Monolith and Continuous Delivery</h3>
+        </section>
+
+        <section>
+          <h2>Module 1 - Start</h2>
+          <br>
+          <ul>
+            <li>Configure Module 1 in it's <strong>start</strong> state:</li>
+            <pre><code>vagrant@workshop:~$ cd ~/topics/start/module1 </code></pre>
+            <pre><code>vagrant@workshop:module1$ ./up.sh </code></pre>
+            </ul>
+        </section>
+
+        <section>
+          <h2><span style="text-transform: none;">&mu;usik updates</span></h2>
+          <img width="1000" data-src="images/workshop-journey/aa-journey-problem-01.jpg" alt="µsik shop company updates 1" style="border:0">
+          <aside class = "notes">
+            do not wait for scheduled deployment cycle <br>
+            not risk in prod, without testing <br>
+            extensive fn test - 4 hours <br>
+            first things first <br>
+            empower our teams <br>
+            get right infra & tools in place <br>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Where are we now?</h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-01.jpg" alt="Just getting started with Single monolithic Shop-App" style="border:0">
+        </section>
+
+        <section>
+          <h2>Module 1 - Overview</h2>
+          <p style="text-align: left">
+            This module uses the shop-app in it's monolithic form, i.e. no external services used.
+            You will have to build, test, package and deploy the shop-app via a Go-CD pipeline.
+            <br/><br/>
+            Once deployed, you can access the application on your host machine at:
+            <a href="http://localhost:8080/" target="_blank"><code>http://localhost:8080</code></a>
+          </p>
+          <br/>
+          <h4>You will learn about:</h4>
+          <ul>
+              <li>CD pipelines</li>
+              <li>Typical stages in a CD pipeline</li>
+              <li><a href="http://www.thoughtworks.com/products/go-continuous-delivery" target="_blank">Go-CD</a> as a tool for implementing a delivery pipeline</li>
+              <li>Build artifacts and tagging them with a build number</li>
+              <li>Become familiar with the Musik shop app</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Meet our monolith</h2>
+          <br>
+          <ul>
+            <li>Our monolithic app is called <strong>Musik shop</strong></li>
+            <li>Source code is located here:<br/>
+            <pre><code>vagrant@workshop:~$ cd ~/workspace/shop-app </code></pre>
+            </li>
+            <li>Built it locally:<br/>
+            <pre><code>vagrant@workshop:shop-app$ ./ci.sh package</code></pre>
+            </li>
+            <li>Run it directly:<br/>
+            <pre><code>./run.sh</code></pre>
+            </li>
+            <li>View the app in your browser:<br/>
+              <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>
+            </li>
+            <li>Stop the app:<br/>
+            Press <code>CTRL+C</code> in the workshop VM terminal</code>
+            </li>
+            </ul>
+            <br>
+        </section>
+
+        <section>
+          <h2>Musik Shop Data Model</h2>
+          <img data-src="images/new-releases.jpg" alt="new releases data model" style="border:0">
+        </section>
+
+        <section>
+          <h2>Application Overview</h2>
+          <img width="920" data-src="images/aa-monolithic-app-overview.jpg" alt="monolithic app overview" style="border:0">
+          <aside class="notes">
+            You can also use the host-only network address of 192.168.33.10 instead of localhost.
+            We use port-forwarding in the Vagrantfile to allow use of localhost for some ports.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h2>Continuous Delivery</h2>
+          </div>
+          <div style="text-align: left; font-size: 1em"><em>"...teams continuously deliver new versions of software to production by decreasing the cycle time
+            between an idea and usable software through the automation of the entire delivery system:
+            build, deployment, test, and release."</em> (<a href="http://refcardz.dzone.com/refcardz/continuous-delivery-patterns" target="_blank">DZone Refcardz: Continuous Delivery</a>)</div>
+          <br/>
+          <ol>
+            <li>Continuous Delivery (CD) takes Agile and Continuous Integration further by enabling frequent, automated, repeatable, low-risk delivery into Production ("the last mile")</li>
+            <li>The CD pipeline is a key construct used to automate the delivery process</li>
+            <li>Software is always in a releaseable state - each commit is a release candidate until proven otherwise</li>
+            <li>Demonstates real progress - no delayed integrations; visibility</li>
+            <li>Exposes bottlenecks and other inefficiencies</li>
+            <li>Provides rapid feedback at all stages of the delivery process</li>
+            <li>Fits well into distributed team structures</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Continuous Delivery: Pipeline</h2>
+          <br/>
+          <img width="960" data-src="images/aa-cd-pipeline.jpg" alt="monolithic app overview" style="border:0" />
+          <small><em>Image credit: Continous Delivery (book), Jez Humble and David Farley</em></small>
+        </section>
+
+        <section>
+          <div>
+            <h2>Continuous Delivery: References</h2>
+            <ul>
+              <li>
+                <span><a href="http://www.amazon.com/dp/0321601912" target="_blank">Continuous Delivery (Book)</a>, Jez Humble and David Farley</span><br/>
+                  <img style="display: block; margin-left: auto; margin-right: auto;" width="240" data-src="images/aa-module1-cd-book.jpg" alt="Continuous Delivery Book" style="border: 0">
+              </li>
+              <li><a href="http://refcardz.dzone.com/refcardz/continuous-delivery-patterns" target="_blank">DZone Refcardz: Continuous Delivery</a></li>
+              <li><a href="http://info.thoughtworks.com/putting-continuous-delivery-into-practice-slideshare.html?aliId=5510306" target="_blank">Implementing Continuous Delivery (ThoughtWorks)</a> - Slide series</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+         <h2>Verify your CD build pipeline</h2><br>
+          <ul>
+            <li>Click to see your pipeline: <a href="http://localhost:8153" target="_blank" title="http://localhost:8153">http://localhost:8153</a></li>
+            <img width="" data-src="images/aa-module1-pipeline-start.jpg" alt="monolithic app overview" style="border:0" />
+          </section>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 1/2</h2>
+          </div>
+          <br>
+          <h2>Add downstream pipeline which deploys the shop-app<br>
+          </h2>
+          <br>
+          <ol>
+            <li>View Module 1 <a target=_blank href="../topics/finish/module1/README.html">README</a> for detailed instructions </li>
+            <li>Create a new downstream pipeline called <code>ShopApp-Deploy</code>
+            </li>
+            <li>It should have two materials:<br/>
+              1: <code>ShopApp</code> pipeline<br/>
+              2: <code>shop-app</code> git repo (<code>gitserver:shop-app.git</code>)
+            </li>
+            <li>Set pipeline to manually trigger the deploy</li>
+            </pre>
+          </ol>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 2/2</h2>
+          </div>
+          <br>
+          <h2>Add downstream pipeline which deploys the shop-app<br>
+          </h2>
+          <br>
+          <ol>
+            <li>Add a <code>Deploy</code> stage with two tasks:<br/>
+              1: Fetch the <code>tar</code> file build artifact from <code>ShopApp / Package</code> stage<br/>
+              2: Run the <code>deploy</code> script to deploy the app container
+            </li>
+            <li>Trigger a deploy of the app</li>
+            <li>Check the app is deployed at: <a href="http://localhost:8080" target="_blank">http://localhost:8080</a></li>
+          </ol>
+        </section>
+
+        <section>
+         <h2>Verify your CD build pipeline</h2><br>
+          <ul>
+            <li>Click to see your pipeline: <a href="http://localhost:8153" target="_blank" title="http://localhost:8153">http://localhost:8153</a></li>
+            <img width="" data-src="images/aa-module1-pipeline-deploy.jpg" alt="deploy pipeline" style="border:0" />
+          </section>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge</h2>
+          </div>
+          <br>
+          <h2>Tag app with build number</h2>
+          <ol>
+            <li>We want traceability from our deployed apps/services to the build that produced the artifacts</li>
+            <li>In your VM terminal, check running version of shop app:
+              <pre><code>docker ps   # ==> You will see tag 'latest'</code></code></pre></li>
+            <li>Configure <code>ShopApp - Package</code> stage to pass in build number to package script</li>
+            <li><strong>Hint:</strong> View console tab from previous build to identity available Go-CD environment variables</li>
+            <li>Trigger a build and deploy it</li>
+            <li>Now verify correctly tagged running version of app is running:
+              <pre><code>docker ps   # ==> You will see tag with builder number</code></code></pre>
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>(Optional) Challenge</h2>
+          </div>
+          <br>
+          <h2>Show upstream build number in Deploy pipeline build label
+          </h2>
+          <br>
+          <ol>
+            <li>Make it easier to see which build of the app has been deployed</li>
+            <li>Click the 'gear' icon for the <code>ShopApp-Deploy</code> pipeline</li>
+            <li>In <code>Generial Options / Basic Settings</code>, edit the <code>Label Template</code> field</li>
+            <li><strong>Hint:</strong> Try <code>${ShopApp}-${COUNT}</code></li>
+            <li>See page <a href="http://www.go.cd/documentation/user/current/configuration/admin_use_custom_pipeline_label.html" target="_blank">Use a custom pipeline label</a> (external link)</li>
+            <li>Redploy the app to see the label take effect</li>
+          </ol>
+        </section>
+
+        <section>
+         <h2>Verify your CD build pipeline</h2><br>
+          <ul>
+            <li>Click to see your pipeline: <a href="http://localhost:8153" target="_blank" title="http://localhost:8153">http://localhost:8153</a></li>
+            <img width="" data-src="images/aa-module1-pipeline-label.jpg" alt="deploy pipeline with custom label" style="border:0" />
+          </section>
+          </ul>
+        </section>
+
+        <section>
+         <h2>View the Pipeline Value-Stream Map</h2><br>
+          <ul>
+            <li>Click to see your pipeline: <a href="http://localhost:8153" target="_blank" title="http://localhost:8153">http://localhost:8153</a></li>
+            <img width="" data-src="images/aa-module1-pipeline-vsm.jpg" alt="deploy pipeline vsm" style="border:0" />
+          </section>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Module 1 - Finish</h2>
+          <br>
+          <ul>
+            <li>Didn't finish in time?</li>
+            <li>Configure Module 1 in it's <strong>finish</strong> state:</li>
+            <pre><code class="sh">vagrant@workshop:~$ cd ~/topics/finish/module1</code></pre>
+            <pre><code class="sh">vagrant@workshop:module1$ ./up.sh </code></pre>
+            </ul>
+        </section>
+
+        <section>
+          <div>
+            <h2> Module 1 - Wrap-up </h2>
+          </div>
+          <ol>
+            <li>Introduced the monolithic web app "Musik Shop"</li>
+            <li>Built a basic CD pipeline to build, test, package and deploy the "Musik Shop" app</li>
+            <li>Reviewed basic Continous Delivery concepts</li>
+            <li>Introduction to Go-CD and it's model:
+              <ul>
+                <li>Pipelines</li>
+                <li>Stages</li>
+                <li>Jobs</li>
+                <li>Tasks</li>
+                <li>Materials</li>
+                <li>Artifacts</li>
+              </ul>
+            </li>
+            <li>Previewed application deployment to Docker</li>
+          </ol>
+        </section>
+
+        <section>
+          <div>
+            <h2>Module 1 - Tips and Advice</h2>
+          </div>
+          <ol>
+            <li>Use CD Pipelines to automate your build process and provide feedback on production readiness of
+            software</li>
+            <li>Model your build process as a series of stages for improved feedback</li>
+            <li>Provide scripts for building, testing, packaging and deploying your apps:
+              <ul>
+                <li>Store these with your app code</li>
+                <li>Call them from your CI/CD tool</li>
+              </ul>
+            </li>
+            <li>Build artifacts once and use them in downstream stages / pipelines</li>
+            <li>Always tag your build artifacts with a build number</li>
+            <li>Extend your CD pipeline to automate deployment into your environments</li>
+            <li>Monolithic apps can be easy to build and deploy as they have less moving parts</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Prepare VM for next module</h2>
+          <ul>
+            <li>Exit from VM</li>
+            <pre><code>vagrant@workshop:~$ exit</code></pre>
+            <li>Destroy and boot VM</li>
+            <pre><code  content-trim class="sh">workshop-dist/box$ vagrant destroy
+        workshop-dist/box$ vagrant up
+        workshop-dist/box$ vagrant ssh</code></pre>
+            <li>If you are using Windows run <code>Git Bash</code> to open a terminal window then follow these steps:</li>
+              <pre><code content-trim class="sh">$ cd 'workshop-dist\box\'
+        workshop-dist\box$ vagrant destroy
+        workshop-dist\box$ vagrant up
+        workshop-dist\box$ vagrant ssh</code></pre>
+          </ul>
+        </section>
+
+        <!-- Module 2 -->
+
+        <section id="module-2" class="title">
+          <h1>Module 2</h1>
+          <h3>Meet our first microservice and Docker</h3>
+        </section>
+
+        <section>
+          <h2>Run the Workshop VM</h2>
+          <ul>
+            <li>Log into the <code>workshop</code> VM from<br> the <code>workshop-dist/box</code> directory on your machine:</li>
+            <pre><code  content-trim class="sh">workshop-dist/box$ vagrant ssh</code></pre>
+            <li>If you are using Windows run <code>Git Bash</code> to open a terminal window then follow these steps:</li>
+              <pre><code content-trim class="sh">workshop-dist\box$ vagrant ssh</code></pre>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Module 2 - Start</h2>
+          <br>
+          <ul>
+            <li>Configure Module 2 in it's <strong>start</strong> state:</li>
+            <pre><code>vagrant@workshop:~$ cd ~/topics/start/module2</code></pre>
+            <pre><code>vagrant@workshop:module2$ ./up.sh </code></pre>
+            </ul>
+        </section>
+
+        <section>
+          <h2><span style="text-transform: none;">&mu;usik updates</span></h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-problem-02.jpg" alt="µsik shop company updates 2" style="border:0">
+          <aside class = "notes">
+            twitter - fb trends & fathers day - mothers day <br>
+            attract diff use groups - more vendors <br>
+            <strong> rollback </strong>
+            sounds cool like start up <br>
+            new language ideas - diff functional languages<br>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Where are we now?</h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-02.jpg" alt="Just getting started with Single monolithic Shop-App" style="border:0">
+        </section>
+
+        <section>
+          <h2>Module 2 - Overview</h2>
+          <p style="text-align: left">
+            In this module, we extract the album review functionality from the monolithic shop-app into a separate service called the <code>review</code> service.
+            You will be provided with the Go-CD build and deploy pipelines for both the <code>shop-app</code> and <code>review</code> service.<br/><br/>
+            Once deployed, you can access the application on your host machine at:
+            <a href="http://localhost:8080/" target="_blank"><code>http://localhost:8080</code></a>
+          </p>
+          <br/>
+          <h4>You will learn about:</h4>
+          <ul>
+              <li>Introduction to Microservices</li>
+              <li>Introduction to Docker</li>
+              <li>Basics of working with Docker from the command-line</li>
+              <li>Become familiar with the <code>review</code> service</li>
+              <li>Exploring <code>review</code> service API documentation</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Meet our first microservice:<br/>Review</h2>
+          <br>
+          <ul>
+            <li>Our first extracted service is called <code>review</code> service
+            </li>
+            <li>Source code is located here:<br/>
+            <pre><code>vagrant@workshop:~$ cd ~/workspace/review </code></pre>
+            </li>
+            <li>Built it locally:<br/>
+            <pre><code>vagrant@workshop:review$ ./ci.sh package</code></pre>
+            </li>
+            <li>Run it directly:<br/>
+            <pre><code>./run.sh</code></pre>
+            </li>
+            <li>View the service API docs in your browser:<br/>
+              <a href="http://localhost:8082/api-docs" target="_blank">http://localhost:8082/api-docs</a>
+            </li>
+            <li>Stop the service:<br/>
+            Press <code>CTRL+C</code> in the workshop VM terminal</code>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Application Overview</h2>
+          <img data-src="images/aa-module2-setup.jpg" alt="monolithic app overview" style="border:0">
+          <aside class="notes">
+            You can also use the host-only network address of 192.168.33.10 instead of localhost.
+            We use port-forwarding in the Vagrantfile to allow use of localhost for some ports.
+          </aside>
+        </section>
+
+        <section>
+        <h2>Verify your CI build pipeline</h2>
+          <ul>
+            <li>Click to see your pipeline: <a href="http://localhost:8153" target="_blank" title="http://localhost:8153">http://localhost:8153</a></li>
+            <img data-src="images/aa-module2-pipeline-start.jpg" alt="monolithic app overview" style="border:0">
+          </section>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 1/3</h2>
+          </div>
+          <br>
+          <h2>Update monolithic shop app to use review service</h2>
+          <ol>
+            <li>View Module 2 <a target=_blank href="../topics/finish/module2/README.html">README</a> for detailed instructions </li>
+            <li>Navigate to the <code>shop-app</code> code in your workspace:
+              <pre><code>vagrant@workshop:~$ cd ~/workspace/shop-app</code></pre>
+            </li>
+            <li>Edit the file: <code>NewReleasesClient.java</code><pre><code>vagrant@workshop:shop-app$ nano src/main/java/microservices/shop/core/NewReleasesClient.java</code></pre></li>
+            <li>Search for the <code>TODO</code> comment</li>
+            <li>Change the code so that it retrieves the star ratings via the <code>review</code> service</li>
+          </ol>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 2/3</h2>
+          </div>
+          <br>
+          <h2>Update monolithic shop app to use review service<br>
+          </h2>
+          <ol>
+            <li>Edit the <code>deploy.sh</code> script to <a href="https://docs.docker.com/userguide/dockerlinks/" target="_blank">link</a> the <code>shop-app</code> container to the review container:
+            <pre><code>vagrant@workshop:shop-app$ nano scripts/deploy.sh</code></pre></li>
+            <li>Search for the <code>TODO</code> comment</li>
+            <li>Edit the line starting with <code>docker run</code> to look like this:
+            <pre><code>docker run ... --link review:review ...</code></pre></li>
+          </ol>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 3/3</h2>
+          </div>
+          <h2>Update monolithic shop app to use review service</h2>
+          <ol>
+            <li>Commit and push your changes to trigger a new build</li>
+            <li>Wait until your builds have completed and are green</li>
+            <li>Deploy your <code>review</code> service from the <code>ReviewService-Deploy</code> pipeline (*)</li>
+            <li>Then deploy your <code>shop-app</code> from the <code>ShopApp-Deploy</code> pipeline</li>
+            <li>Can you see the star ratings in the <code>shop-app</code>?<br/>Refresh the app in your browser: <a href="http://localhost:8080/" target="_blank">http://localhost:8080/</a></li>
+            <li> What will happen if <code>review</code> service is stopped? </li>
+            <small style="padding-top : 20px">(*) Due to limitations of Docker Links, there is some ordering imposed on the deployment of our app and services.  This will be addressed in Module 4.</small>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Module 2 - Finish</h2>
+          <br>
+          <ul>
+            <li>Didn't finish in time?</li>
+            <li>Configure Module 2 in it's <strong>finish</strong> state:</li>
+            <pre><code>vagrant@workshop:~$ cd ~/topics/finish/module2 </code></pre>
+            <pre><code>vagrant@workshop:module2$ ./up.sh </code></pre>
+            </ul>
+        </section>
+
+        <section>
+          <div>
+            <h2>Microservices Overview</h2>
+          </div>
+          <div style="text-align: left"><em>"...software architectural style where applications are composed of small, independent processes communicating with each other using language-agnostic APIs"</em> (<a href="http://en.wikipedia.org/wiki/Microservices" target="_blank">Wikipedia</a>)</div>
+          <br/>
+          <div style="text-align: left"><strong>Characteristics:</strong></div>
+          <ol>
+            <li>Externally highly-decoupled; internally highly-cohesive</li>
+            <li>Do one small task well (SRP) - single business purpose</li>
+            <li>Organised around Business Capabilities - Bounded Context (DDD)</li>
+            <li>Align well with Continuous Delivery - autonomous teams, small/frequent releases, independently releaseable</li>
+            <li>Decentralised governance</li>
+            <li>Service-oriented: Fine-grained; Lightweight, not heavyweight ESBs</li>
+            <li>Independently scaleable and replaceable (language-agnostic)</li>
+          </ol>
+          <aside class="notes">
+            Decentralised governance: Teams can use the right tool for the job rather than being forced to use some Enterprise-wide standard.
+            It makes sense to standardise on some cross-cutting concerns like logging, security, monitoring, etc.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h2>Microservices References</h2>
+            <ul>
+              <li>
+                <span><a href="http://shop.oreilly.com/product/0636920033158.do" target="_blank">Building Microservices (Book)</a>, Sam Newman</span><br/>
+                  <img style="display: block; margin-left: auto; margin-right: auto;" width="240" data-src="images/aa-book-building-microservices.jpg" alt="Building Microservices" style="border: 0">
+              </li>
+              <li><a href="https://www.youtube.com/watch?v=UfQTNtbq170" target="_blank">Goldilocks and the three microservices (Video)</a>, Charles Haynes</li>
+              <li><a href="https://blog.docker.com/2014/12/dockercon-europe-keynote-state-of-the-art-in-microservices-by-adrian-cockcroft-battery-ventures/" target="_blank">State of the Art in Microservices (Video, Slides)</a>, Adrian Cockcroft</li>
+              <li><a href="http://martinfowler.com/articles/microservices.html" target="_blank">Microservices (Article)</a>, Martin Fowler and James Lewis</li>
+              <li><a href="http://highscalability.com/blog/2014/4/8/microservices-not-a-free-lunch.html" target="_blank">Microservices - Not A Free Lunch! (Blog)</a>, Benjamin Wootton</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <div>
+            <h2>Docker Overview</h2>
+          </div>
+          <div style="text-align: left"><em>"Docker is an open platform for developers and sysadmins to build, ship, and run distributed applications. Consisting of Docker Engine, a portable, lightweight runtime and packaging tool, and Docker Hub"</em> (<a href="https://www.docker.com/whatisdocker/" target="_blank">docker.com/whatisdocker</a>)</div>
+          <br/>
+          <div style="text-align: left"><strong>Characteristics:</strong></div>
+          <ol>
+            <li>Lightweight virtualisation, container-based (e.g. LXC)</li>
+            <li>Fast deployment</li>
+            <li>Portable applications and services: Build once, run anywhere (*)</li>
+            <li>Container resource isolation: CPU, memory, block I/O and network</li>
+            <li><a href="https://docs.docker.com/introduction/understanding-docker/" target="_blank">Docker images</a> make use of union file systems to save space</li>
+            <li>Docker ecosystem includes tools like Docker Machine, Docker Compose, and Docker Swarm</li>
+            <li>Lots of third-party software emerging: <a href="http://mesos.apache.org/" target="_blank">Mesos</a> / <a href="https://mesosphere.github.io/marathon/" target="_blank">Marathon</a>, <a href="http://kubernetes.io/" target="_blank">Kubernetes</a>, <a href="https://coreos.com/" target="_blank">CoreOS</a>, <a href="http://deis.io/" target="_blank">Deis</a>, etc.</li>
+          </li>
+          </ol>
+        </section>
+
+        <section>
+          <div>
+            <h2>Docker on your Computer</h2>
+            <img data-src="images/aa-docker-your-computer.jpg" alt="Docker on your computer" style="border:0">
+          </div>
+          <aside class="notes">
+            Normally, if you were running Docker on a Linux host you would not need the Guest OS and Hypervisor pieces.
+            However, since the workshop VM includes Go-CD, Gitolite (git repos) and cached Docker containers you will
+            need to run VirtualBox with the workshop VM even on Linux.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h2>Dockerised Services on your Workshop VM</h2>
+            <img width="920" data-src="images/aa-module2-dockerised-services.jpg" alt="Docker on your computer" style="border:0">
+          </div>
+          <aside class="notes">
+            If you restart the review service then the link is maintained.  However, if you destory and create a new review service container
+            (.e.g after a new deploy) then the container IP will likely change and the link will be broken until you restart the
+            shop container.  One workaround is to use an Ambassador Container (https://docs.docker.com/articles/ambassador_pattern_linking/).
+          </aside>
+        </section>
+
+        <section>
+          <h2>Packaging an app/service generates a Docker image</h2>
+          <ol>
+            <li>We are using a Maven plugin to build Docker images</li>
+            <li>See one of the app/service <code>pom.xml</code> files, e.g.
+              <pre><code>vagrant@workshop:~$ less ~/workspace/review/pom.xml</code></pre>
+              <pre><code content-trim class="pom.xml"><plugin>
+  <groupId>com.spotify</groupId>
+  <artifactId>docker-maven-plugin</artifactId>
+  <version>0.1.1</version>
+  <configuration>
+    <imageName>review</imageName>
+    <baseImage>java:8-jre</baseImage>
+    <entryPoint>["java", "-jar", "/${project.build.finalName}.jar",
+      "server","config.yml"]</entryPoint>
+    <exposes>
+      <expose>8080</expose>
+      <expose>8081</expose>
+    </exposes>
+  ...
+  </configuration>
+  <executions>
+    <execution>
+      <phase>package</phase>
+      <goals>
+        <goal>build</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+                </code></pre>
+            </li>
+            <li>Docker has builtin support for building images via <a href="https://docs.docker.com/reference/builder/" target="_blank">Dockerfiles</a>:
+            <li>E.g. In a directory with a file called <code>Dockerfile</code><br/>
+              <pre><code>docker build -t review .</code></pre></li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Running a service starts a container from the Docker image</h2>
+          <br>
+          <ol>
+            <li>See one of the app/services <code>deploy.sh</code> files, e.g.
+              <pre><code>vagrant@workshop:~$ less ~/workspace/review/scripts/deploy.sh</code></pre>
+              <pre>
+                <code content-trim class="sh">app_name=${2:-review}
+port=${3:-8082}
+image_and_tag=... # e.g. review:9
+...
+# 3. Start new Container
+docker run -d -p ${port}:${port} --name ${app_name} --hostname ${app_name} "${image_and_tag}"</code></pre>
+            </li>
+            <li>Check running containers:
+            <pre><code content-trim class="sh">vagrant@workshop:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND                ... STATUS        NAMES
+dad11c8fcb54        shop:61             "java -jar /shop-0.0   ... Up 24 hours   shop-app
+836a4e00261a        review:9            "java -jar /review-0   ... Up 24 hours   review</code></pre>
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <div>
+            <h2>Docker References</h2>
+            <ul>
+              <li>
+                <span><a href="http://www.dockerbook.com/" target="_blank">The Docker Book (eBook)</a>, James Turnbull</span><br/>
+                  <img style="display: block; margin-left: auto; margin-right: auto;" width="240" data-src="images/aa-book-thedockerbook.jpeg" alt="The Docker Book" style="border: 0">
+                </a></li>
+              <li><a href="https://www.youtube.com/watch?v=Q5POuMHxW-0" target="_blank">Introduction to Docker (Video)</a> - Solomon Hykes</li>
+              <li><a href="https://docs.docker.com/userguide/" target="_blank">Docker User Guide</a> - Getting Started</li>
+              <li><a href="http://docs.docker.com/reference/commandline/cli/" target="_blank">Docker Command Line</a> - Command-line reference</li>
+              <li><a href="https://docs.docker.com/reference/builder/" target="_blank">Dockerfile Reference</a> - Building Docker images</li>
+              <li><a href="https://github.com/spotify/docker-maven-plugin" target="_blank">spotify/docker-maven-plugin (repo)</a> - A maven plugin for docker</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 1/2</h2>
+          </div>
+          <br/>
+          <h2>Docker from the command-line</h2>
+          <ol>
+            <li>Refer to <a target=_blank href="../topics/finish/module2/README.html">README</a> for detailed instructions </li>
+            <li>List Docker images on your VM</li>
+            <li>View the build history for the <code>review</code> image</li>
+            <li>Which containers are currently running?</li>
+            <li>Which ports is the <code>review</code> service listening on?</li>
+            <li>Which ports are forwarded to the host for the review service?</li>
+            <li>View logs for one of the running containers</li>
+            <li>Open a terminal inside a running container.  Which processed are running?</li>
+          </ol>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>(Optional) Challenge - Part 2/2 </h2>
+          </div>
+          <br>
+          <h2>Docker from the command-line</h2>
+          <ol>
+            <li>You already have the <code>busybox</code> image on your <code>workshop</code> VM</li>
+            <li>How large is the <code>busybox</code> image compared to the other images?</li>
+            <li>Create a Docker image which repeatedly returns the current date/time -
+                You will need to create file named <code>Dockerfile</code>:
+                <pre><code content-trim class="sh">FROM busybox
+EXPOSE 8888
+CMD /bin/sh -c "while true; do echo 'tick' && echo The time is `date` | nc -l -p 8888; done"</code></pre>
+            </li>
+            <li>Build the image and call it <code>time-server</code></code></li>
+            <li>Start a container named <code>my-time-server</code> based on this image and map the exposed container port to 8989</li>
+            <li>Test your <code>time-server</code> works using:<pre><code>curl http://localhost:8989    # ==> The time is Wed Apr 29 11:17:12 UTC 2015</code></code></pre></li>
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <div>
+            <h2> Module 2 - Wrap-up </h2>
+          </div>
+          <ol>
+            <li>Extracted album star ratings functionality into the <code>review</code> service</li>
+            <li>Quick intro to Microservices and some characteristics</li>
+            <li>Quick overview of Docker</li>
+            <li>Examined Docker setup on your computer</li>
+            <li>Examined packaging services in Docker images with Maven</li>
+            <li>Examined running containers using Docker images</li>
+            <li>Explored Docker from the command-line</li>
+            <li>Built a Docker image from a Dockerfile</li>
+            <li>Created a simple time server using the tiny <code>busybox</code> image</li>
+          </ol>
+        </section>
+
+        <section>
+          <div>
+            <h2>Module 2 - Tips and Advice</h2>
+          <ol>
+            <li>It's ok to start with a monolith then extract services once you understand your business domain and bounded contexts</li>
+            <li>Try to keep your Docker images small (e.g. base them on busybox, alpine, or debian)</li>
+            <li>Don't use Docker containers like full blown VMs - Run a single process in each Docker container</li>
+            <li>Use Docker links to communicate between containers (on the same host)</li>
+            <li>Log to STDOUT, STDERR not to files</li>
+            <li>Configure apps / services via ENV variables or use an external config store (e.g. etcd, consul)</li>
+            <li>Use <a href="https://docs.docker.com/articles/host_integration/" target="_blank">OS service scripts</a> to keep your containers running and to start them on boot (e.g. Upstart, Systemd) </li>
+          </ol>
+        </section>
+
+        <!-- Module 3 -->
+
+        <section id="module-3" class="title">
+          <h1>Module 3</h1>
+          <h3>Our second microservice and Consumer-driven Contracts</h3>
+        </section>
+
+        <section>
+          <h2>Run the Workshop VM</h2>
+          <ul>
+            <li>Start up the <code>workshop</code> VM from<br> the <code>workshop-dist/box</code> directory on your machine:</li>
+            <pre><code  content-trim class="sh">workshop-dist/box$ vagrant destroy
+workshop-dist/box$ vagrant up
+workshop-dist/box$ vagrant ssh</code></pre>
+            <li>If you are using Windows run <code>Git Bash</code> to open a terminal window then follow these steps:</li>
+              <pre><code content-trim class="sh">$ cd 'workshop-dist\box\'
+workshop-dist\box$ vagrant destroy
+workshop-dist\box$ vagrant up
+workshop-dist\box$ vagrant ssh</code></pre>
+          </ul>
+        </section>
+
+        <section>
+          <h2> Module 3 - Start </h2>
+          <br>
+          <ul>
+            <li>Configure Module 3 in it's <strong>start</strong> state:</li>
+            <pre><code>vagrant@workshop:~$ cd ~/topics/start/module3</code></pre>
+            <pre><code>vagrant@workshop:module3$ ./up.sh </code></pre>
+            </ul>
+        </section>
+
+        <section>
+          <h2><span style="text-transform: none;">&mu;usik updates</span></h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-problem-03.jpg" alt="µsik shop company updates 3" style="border:0">
+          <aside class="notes">
+            new, shiny, review service <br>
+            back to alphabetical order - differentiating factor <br>
+            really disappointing <br>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Where are we now? </h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-03.jpg" alt="Just getting started with Single monolithic Shop-App" style="border:0">
+        </section>
+
+				<section>
+					<h2>Module 3 - Overview</h2>
+					<p style="text-align: left">
+						In this module, we extract the album catalogue functionality from the <code>shop-app</code> into a separate service called the <code>catalogue</code> service.
+						You will be provided with the Go-CD build and deploy pipelines for the <code>shop-app</code>, <code>review</code> and <code>catalogue</code> services.<br/><br/>
+						Once deployed, you can access the application on your host machine at:
+						<a href="http://localhost:8080/" target="_blank"><code>http://localhost:8080</code></a>
+					</p>
+					<br/>
+					<h4>You will learn about:</h4>
+					<ul>
+							<li>Structuring build and deploy pipelines to support autonomous teams and service deployment</li>
+							<li>Consumer-driven contracts</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2> Meet our second microservice:<br/>Catalogue </h2>
+					<ul>
+						<li>Our second extracted service is called <code>Catalogue</code> service
+						</li>
+						<li>Source code is located here:<br/>
+						<pre><code>vagrant@workshop:~$ cd ~/workspace/catalogue</code></pre>
+						</li>
+						<li>Built it locally:<br/>
+						<pre><code>vagrant@workshop:catalogue$ ./ci.sh package</code></pre>
+						</li>
+						<li>Run it directly:<br/>
+						<pre><code>./run.sh</code></pre>
+						</li>
+						<li>
+							View the service API docs in your browser:<br/>
+							<a href="http://localhost:8084/api-docs" target="_blank">http://localhost:8084/api-docs</a>
+						</li>
+						<li>Stop the service:<br/>
+						Press <code>CTRL+C</code> in the workshop VM terminal</code>
+						</li>
+						</ul>
+						<br>
+            <aside class="notes">
+              awesome team from Antartica - already did the work for us <br>
+              use swagger ui and show api-docs
+              http://petstore.swagger.io/
+            </aside>
+				</section>
+
+				<section>
+					<h2>Application Overview</h2>
+					<img data-src="images/aa-module3-setup.jpg" alt="module3 app overview" style="border:0">
+					<aside class="notes">
+            <strong>First trigger build</strong><br><br>
+
+            Build -> Docker images<br>
+            Deploy -> starts a container based on the image<br><br>
+
+            Without docker link -> containers wont know about each other
+					</aside>
+				</section>
+
+				<section>
+				<h2>Verify your CD build pipeline</h2>
+					<ul>
+						<li>Click to see your pipeline: <a href="http://localhost:8153" target="_blank" title="http://localhost:8153">http://localhost:8153</a></li>
+						<img width="1000" data-src="images/aa-module3-pipeline-start.png" alt="module3 pipeline start" style="border:0">
+					</section>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Deploy your services and app</h2>
+					<ul>
+						<li>Deploy the <code>review</code> and <code>catalogue</code> services first (*)</li>
+						<li>Next deploy the <code>shop-app</code></li>
+						<li>View the app in your browser: <a href="http://localhost:8080" target="_blank">http://localhost:8080</a></li>
+						<li>Do you notice anything weird?</li>
+						<img width="800" data-src="images/aa-module3-broken-shop-app.jpg" alt="module3 broken shop-app" style="border:0">
+						<br/>
+						<small><li>(*) Due to limitations of Docker Links, there is some ordering imposed on the deployment of our app and services.  This will be addressed in Module 4.</li></small>
+					</ul>
+          <aside class="notes">
+            typical end-to-end<br>
+            difficult to set up<br>
+            more difficult to maintain <br>
+            flakey, dealys response cycle<br>
+          </aside>
+				</section>
+
+        <section>
+          <div>
+            <h2>Consumer-driven Contracts</h2>
+          </div>
+          <ol>
+            <li class="fragment">Each consumer captures expectations of a provider in a separate contract</li>
+            <li class="fragment">Each consumer generates this contract during the test stage</li>
+          </ol>
+          <img class="fragment" width="800" data-src="images/aa-module3-pact-record.jpg" alt="CDC - record expectations of consumer" style="border:0"><br/>
+          <aside class="notes">
+            <strong> integration tests </strong>
+            <strong>contracts r not new</strong> <br><br>
+            provider contracts <br>
+            ripple effect <br>
+            tight coupling <br><br>
+            explain how pact works<br>
+          </aside>
+        </section>
+
+        <section data-transition="none">
+          <div>
+            <h2>Consumer-driven Contracts</h2>
+          </div>
+          <ol>
+            <li>Each consumer captures expectations of a provider in a separate contract</li>
+            <li>Each consumer generates this contract during the test stage</li>
+            <li class="fragment">Provider must comply to every contract and runs a verification test against all generated contracts</li>
+          </ol>
+          <img class="fragment" width="750" data-src="images/aa-module3-pact-replay.jpg" alt="CDC - Replay consumer expectation against provider and verify" style="border:0"><br/>
+          <aside class="notes">
+            <strong>Example with Evan</strong><br>
+            This is more like unit test <br>
+          </aside>
+        </section>
+
+        <section data-transition="none">
+          <div>
+            <h2> Consumer-driven Contracts </h2>
+          </div>
+          <ol>
+            <li>Each consumer captures expectations of a provider in a separate contract</li>
+            <li>Each consumer generates this contract during the test stage</li>
+            <li>Provider must comply to every contract and runs a verification test against all generated contracts</li>
+            <li>We are using <a target="_blank" href="https://github.com/realestate-com-au/pact">pact library</a> to help us generate and verify these contracts</li><br>
+            <strong>Benefits:</strong>
+            <ul>
+              <li>No complex, slow and brittle integration tests</li>
+              <li>Helps the teams to stay more agile</li>
+              <li>Easier to make changes and also identify any potential consumer impacts</li>
+              <li>Faster reponses and reduces likelihood of flakey tests</li>
+            </ul>
+          </ol>
+          <aside class="notes">
+            change without breaking others <br> <br>
+            does it mean end-to-end test not required <br>
+            trade-off bw speed & test coverage/confidence <br>
+            very thin end-to-end - core fn <br>
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h2> CDC - Characteristics </h2>
+          </div>
+          <div style="text-align: left; font-size: 0.9em;"><em>[CDC] imbues providers with insight into their consumer obligations, and focuses service evolution around the delivery of the key business functionality demanded by consumers.</em> (<a href="http://martinfowler.com/articles/consumerDrivenContracts.html" target="_blank">MartinFowler.com</a>)</div>
+          <br/>
+          <div style="text-align: left"><strong>Characteristics:</strong></div>
+          <ol>
+            <li>Allows services to evolve independently of each other and supports independent releasing of services</li>
+            <li>Increase service independence by sharing contracts, not types</li>
+            <li>Allows consumers to express and assert their expectations of a service/provider contract</li>
+            <li>Allows testing against a single producer in isolation leading to faster, more reliable tests than end-to-end tests</li>
+            <li>CDCs are a codified set of discussions about what a service API should look like</li>
+            <li>Failures are a trigger point to have conversations about how the API should evolve</li>
+          </ol>
+          <aside class="notes">
+            Discuss build and deploy pipeline structure to support autonomous teams and service deployment
+          </aside>
+        </section>
+
+				<section>
+					<div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+						<h2> Challenge - Part 1/3</h2>
+					</div>
+					<br>
+					<h2>Generate contract from Shop-App</h2>
+					<ol>
+						<li>View Module 3 <a target=_blank href="../topics/finish/module3/README.html">README</a> for detailed instructions</li>
+						<li>We will be using <a href="https://github.com/DiUS/pact-jvm" target="_blank">pact-jvm</a> (JVM version of <a href="https://github.com/realestate-com-au/pact" target="_blank">Pact</a>) to show that changes made to the <code>review</code> service have broken the <code>shop-app</code></li>
+            <li>Generate the "pact file" for the <code>shop-app</code> consumer
+              <pre><code>vagrant@workshop:~ cd ~/workspace/shop-app</code></pre>
+              <pre><code>vagrant@workshop:shop-app$ ./ci.sh test</code></pre>
+					</ol>
+          <aside class="notes">
+            more like unit test <br> <br>
+            run CDC in build pipeline <br>
+            Pact file will be generated at target/pacts<br>
+            Do ls target/pacts to see the file
+          </aside>
+				</section>
+
+        <section>
+          <h2>ShopApp-ReviewService contract</h2>
+          <img width="1000" data-src="images/aa-module3-pactfile.jpg" alt="ShopApp-ReviewService.json pact file" style="border:0"><br/>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2> Challenge - Part 2/3</h2>
+          </div>
+          <br>
+          <h2>Verify contract from Review Service</h2>
+          <ol>
+            <li>Copy the <a target=_blank href="../../my-workspace/shop-app/target/pacts/ShopApp-ReviewService.json">pact file</a> to the review service <code>pacts</code> directory:
+              <pre><code>vagrant@workshop:shop-app$ mkdir -p ~/workspace/review/pacts</code></pre>
+              <pre><code>vagrant@workshop:shop-app$ cp target/pacts/ShopApp-ReviewService.json ../review/pacts/</code></pre>
+            <li>Commit and push changes made to the <code>review</code> service to include the pact file</li>
+          </ol>
+          <aside class="notes">
+            pact broker <br>
+            file share <br>
+          </aside>
+        </section>
+
+        <section data-transition="none">
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2> Challenge - Part 2/3</h2>
+          </div>
+          <br>
+          <h2>Verify contract from Review Service</h2>
+          <ol>
+            <li>Edit the <code>review</code> service pipeline:</li>
+            <ul>
+                <li>Add a <code>ConsumerTests</code> stage and a <code>ConsumerTests</code> job</li>
+                <li>Under the job, add a <strong>task</strong> which executes the command:
+                <pre><code>./ci.sh pact_verify</code></pre></li>
+                <li>The <code>pact_verify</code> script exists in <code>review</code> service <code>scripts</code> directory</li>
+                <li>Trigger a new build of <code>review</code> service</li>
+                <li>The <code>ConsumerTests</code> stage should have failed (<span style="color: red">red</span>)</li>
+            </ul>
+          </ol>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2> Challenge - Part 3/3</h2>
+          </div>
+          <br>
+          <h2>Expose broken consumer via Pact</h2>
+          <li>View the console output for the <code>ConsumerTests</code> job:</li>
+          <img width="200" data-src="images/aa-module3-challenge1-failure.jpg" alt="cdc build failure" style="border:0"><br/>
+          <li>Uh-oh, someone renamed <code>stars</code> to <code>starRatings</code>:</li>
+          <img width="650" data-src="images/aa-module3-challenge1-failure-reason.jpg" alt="cdc build failure reason" style="border:1">
+          <aside class="notes">
+            do not jumpt to fix <br><br>
+            business domain <br>
+            versioning/upgrade <br>
+            service boundaries <br><br>
+
+            smart client/provider <br>
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h2> Pact Overview - Consumer</h2>
+          </div>
+          <img width="1000" data-src="images/aa-pacts-1.jpg" alt="pact overview - client" style="border:0">
+        </section>
+
+        <section>
+          <div>
+            <h2> Pact Overview - Provider</h2>
+          </div>
+          <img width="1000" data-src="images/aa-pacts-2.jpg" alt="pact overview - client" style="border:0">
+        </section>
+
+        <section>
+          <div>
+            <h2>Pact Overview</h2>
+          </div>
+          <img width="1000" data-src="images/aa-pacts-3.jpg" alt="pact overview - client" style="border:0">
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2> Challenge </h2>
+          </div>
+          <br>
+          <h2>Fix review service so that the shop-app works again<br>
+          </h2>
+          <ol>
+            <li>View Module 3 <a target=_blank href="../topics/finish/module3/README.html">README</a> </li>
+            <li>Edit the file:
+            <pre><code>vagrant@workshop:$ cd ~/workspace/review
+vagrant@workshop:$ nano src/main/java/microservices/review/hateoas/StarRatingDto.java</code></pre></li>
+            <li>Search for the text <code>TODO</code> (2 occurrences)</li>
+            <li>Rename the field <code>starRatings</code> to <code>stars</code></li>
+            <li>Save changes; commit and push changes to trigger a build</pre></li>
+            <li>The <code>ReviewService</code> pipeline should become <span style="color: green">green</span></li>
+            <li>Trigger the <code>ReviewService-Deploy</code> pipeline - wait!</li>
+            <li>Then, trigger the <code>ShopApp-Deploy</code> pipeline (due to Docker links)</li>
+            <li>The <code>shop-app</code> should now be showing star ratings again!</li>
+          </ol>
+          <aside class="notes">
+            business discuss & decided
+          </aside>
+        </section>
+
+				<section>
+					<h2>Module 3 - Finish</h2>
+					<br>
+					<ul>
+						<li>Didn't finish in time?</li>
+						<li>Configure Module 3 in it's <strong>finish</strong> state:</li>
+						<pre><code>vagrant@workshop:~$ cd ~/topics/finish/module3</code></pre>
+						<pre><code>vagrant@workshop:module3$ ./up.sh </code></pre>
+						</ul>
+				</section>
+
+				<section>
+					<div>
+						<h2> CDC References </h2>
+						<ul>
+							<li>
+								<span>Chapter  7 - <a href="http://shop.oreilly.com/product/0636920033158.do" target="_blank">Building Microservices (Book)</a>, Sam Newman</span><br/>
+									<img style="display: block; margin-left: auto; margin-right: auto;" width="240" data-src="images/aa-book-building-microservices.jpg" alt="Building Microservices" style="border: 0">
+							</li>
+							<li><a href="http://martinfowler.com/articles/consumerDrivenContracts.html" target="_blank">Consumer-Driven Contracts: A Service Evolution Pattern (Article)</a>, Ian Robinson</li>
+              <li><a href="http://www.slideshare.net/bethesque/pact-39214472" target="_blank">Pacts to the Rescue (Slides)</a>, Beth Skurrie</li>
+              <li><a href="https://github.com/realestate-com-au/pact" target="_blank">realestate-com-au/pact (Github repo)</a></li>
+						</ul>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h2> Module 3 - Wrap-up </h2>
+					</div>
+					<ol>
+						<li>Extracted 2nd microservice, <code>catalogue</code>, from <code>shop-app</code></li>
+            <li>Overview of how CDCs help to ensure providers know about and do not break consumer expectations</li>
+            <li>CDCs allow autonomous teams and independent releasing of services</li>
+            <li>Use of <code>pact</code> library for implementing CDCs</li>
+					</ol>
+				</section>
+
+				<section>
+					<div>
+						<h2> Module 3 - Tips and Advice </h2>
+					<ol>
+						<li>Use CDCs to reduce the reliance of heavy end-to-end or large-scale integration testing</li>
+            <li>Pact is a great tool for implementing CDCs for Ruby, .NET, and JVM languages</li>
+            <li>Have consumer CI builds generate pact files as artifacts on every check-in</li>
+            <li>Have service providers consume pact file artifacts on every provider CI build</li>
+            <li>Avoid coupling service provider pipelines directly to consumer pipelines</li>
+            <li>Use an external artifact store or the <a href="https://github.com/bethesque/pact_broker" target="_blank">Pact Broker</a></li>
+					</ol>
+          <aside class="notes">
+            speed vs confidence/test coverage <br>
+            thin end-end only fr core <br> <br>
+            pact - js client <br>
+            dynamic generation - run on every cI build <br>
+          </aside>
+				</section>
+
+        <!-- Module 4 -->
+
+        <section id="module-4" class="title">
+          <h1>Module 4</h1>
+          <h3>Multi-host deployment and service discovery</h3>
+        </section>
+
+        <section>
+          <h2>Run the Workshop VM</h2>
+          <ul>
+            <li>Start up the <code>workshop</code> VM from<br> the <code>workshop-dist/box</code> directory on your machine:</li>
+            <pre><code  content-trim class="sh">workshop-dist/box$ vagrant destroy
+workshop-dist/box$ vagrant up
+workshop-dist/box$ vagrant ssh</code></pre>
+            <li>If you are using Windows run <code>Git Bash</code> to open a terminal window then follow these steps:</li>
+              <pre><code content-trim class="sh">$ cd 'workshop-dist\box\'
+workshop-dist\box$ vagrant destroy
+workshop-dist\box$ vagrant up
+workshop-dist\box$ vagrant ssh</code></pre>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Module 4 - Start</h2>
+          <br>
+          <ul>
+            <li>Configure Module 4 in it's <strong>start</strong> state:</li>
+            <pre><code>vagrant@workshop:~$ cd ~/topics/start/module4</code></pre>
+            <pre><code>vagrant@workshop:module4$ ./up.sh </code></pre>
+          </ul>
+        </section>
+
+        <section>
+          <h2><span style="text-transform: none;">&mu;usik updates</span></h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-problem-04.jpg" alt="µsik shop company updates 4" style="border:0">
+        </section>
+
+        <section>
+          <h2>Where are we now? </h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-04.jpg" alt="Just getting started with Single monolithic Shop-App" style="border:0">
+        </section>
+
+				<section>
+					<h2>Module 4 - Overview</h2>
+					<p style="text-align: left">
+            We introduce multi-host deployment and service discovery.
+            For scalability and availability purposes, our app and services will no longer be on a single machine.  How will they find each other?<br/><br/>
+            Previously, we used <a href="https://docs.docker.com/userguide/dockerlinks/">Docker Links</a> but these will not work across hosts(*)
+            and have some shortcomings. We want a dynamic way to register and discover our services.</p>
+					<br/>
+					<h4>You will learn about:</h4>
+					<ul>
+							<li>Using <a href="https://www.consul.io/">Consul</a> and <a href="https://github.com/gliderlabs/registrator">Registrator</a> for service discovery</li>
+							<li>Multi-host deployment using <a href="https://docs.docker.com/swarm/">Docker Swarm</a></li>
+					</ul>
+          <p style="text-align: left; font-size: 0.6em">(*) It is possible to link across hosts via an <a href="http://docs.docker.com/articles/ambassador_pattern_linking/">Ambassador Container</a> but it is not as simple as it could be.</p>
+          <aside class="notes">
+            The <a href="http://docs.docker.com/articles/ambassador_pattern_linking/">Ambassador Pattern</a> is currently the only Docker-native approach to remote-host service discovery.
+            We don't want to build static structures with hardcoded ip addresses.  Also, the ephemeral nature of containers means static
+            configuration will not work.  We want a dynamic way to discover hosts.
+            Docker is working to improve and simply address cross-host networking scenarios with it's https://github.com/docker/libnetwork project; however, this is not
+            ready for general use yet.  However, these option don't eliminate the need for service discovery.
+          </aside>
+				</section>
+
+        <section>
+        <h2>Check the Shop App</h2>
+             Click to see your application: <a href="http://localhost:8080" target="_blank" title="http://localhost:8080">http://localhost:8080</a>
+            <img width="750" data-src="images/aa-module4-shop-app-broken.jpg" alt="module4 shop app broken" style="border:0">
+            <aside class="notes">
+              antartica
+            </aside>
+        </section>
+
+        <section>
+        <h2>Shop App now expects to discover services in Consul</h2>
+          <ul>
+            <li>When you deploy the services and <code>shop-app</code> you will notice that the <code>shop-app</code> is no longer working. Why?</li>
+            <li>Checking the Docker logs we can see the <code>shop-app</code> is querying Consul to lookup service endpoints:
+            <pre><code>vagrant@workshop:~$ docker logs -f --tail="all" shop-app</code></pre>
+            <pre><code>DEBUG [2015-05-11 03:50:41,007]
+microservices.consul.CatalogueServiceLookup:
+  Looking up Consul service: http://ip/v1/catalog/service/to-be-named
+  ERROR [2015-05-11 03:50:46,013] microservices.shop.resource.PageResource:
+    Error fetching new releases
+      ! java.net.UnknownHostException: ip: unknown error</code></pre></li>
+            <li>The <code>shop-app</code> code has been updated to lookup service endpoints in <strong>Consul</strong></li>
+            <li>But first, let's learn a little bit about <strong>Consul</strong> and <strong>Registrator</strong>...</li>
+          </ul>
+          <aside class="notes">
+            explain service discovery <br>
+            DNS - best- but hw to update entries <br>
+          </aside>
+        </section>
+
+				<section>
+					<h2>Discovering Services using<br/>Consul + Registrator</h2>
+					<ul>
+						<li><a href="https://www.consul.io/">Consul</a> is a tool for service discovery and configuration. It is designed to be distributed and highly-available.</li>
+              <ul>
+                <li>Consul provides both <a href="https://www.consul.io/docs/agent/http.html">HTTP REST API</a> and <a href="https://www.consul.io/docs/agent/dns.html">DNS interfaces</a> for looking up services</li>
+                <li>Updates are made via the REST API</li>
+              </ul>
+            <br>
+            <li><a href="https://github.com/gliderlabs/registrator">Registrator</a> is a service registry bridge for Docker<br/>
+              <em style="display: inline-block; margin: 20px 0 20px 0; font-family: 'Open Sans Light', Helvetica, sans-serif;">"Registrator automatically register/deregisters services for Docker containers based on published ports and metadata from the container environment" [1]</em>
+            </li>
+            <ul>
+              <li>Registrator helps us automate registering our services without needing to explicitly add registration code to talk to the Consul REST API</li>
+            </ul>
+            <p style="text-align: left; font-size: 0.6em">[1] <a href="https://github.com/gliderlabs/registrator">https://github.com/gliderlabs/registrator</a></p>
+          </ul>
+          <aside class="notes">
+            consul - key/value pairs<br>
+            raft protocl <br> <br>
+            regis talks to docker deamon <br>
+
+          </aside>
+				</section>
+
+				<section>
+					<h2> Consul + Registrator on your VM</h2>
+          <ul>
+            <li class="fragment">Start Catalogue container</li>
+          </ul>
+          <br><br>
+					<img data-src="images/aa-module4-consul-registrator-1.jpg" alt="module4 consul + registrator" style="border:0">
+				</section>
+
+        <section data-transition="none">
+          <h2> Consul + Registrator on your VM</h2>
+          <ul>
+            <li>Start Catalogue container</li>
+            <li class="fragment">Registrator makes an entry in Consul for Catalogue container</li>
+          </ul>
+          <br><br>
+          <img data-src="images/aa-module4-consul-registrator-2.jpg" alt="module4 consul + registrator" style="border:0">
+        </section>
+
+        <section data-transition="none">
+					<h2> Consul + Registrator on your VM</h2>
+          <ul>
+            <li>Start Catalogue container</li>
+            <li>Registrator makes an entry in Consul for Catalogue container</li>
+            <li class="fragment">During run time, Shop App queries Consul for Catalogue Service location</li>
+          </ul>
+          <br><br>
+					<img data-src="images/aa-module4-consul-registrator-3.jpg" alt="module4 consul + registrator" style="border:0">
+				</section>
+
+        <section data-transition="none">
+					<h2> Consul + Registrator on your VM</h2>
+          <ul>
+            <li>Start Catalogue container</li>
+            <li>Registrator makes an entry in Consul for Catalogue container</li>
+            <li>During run time, Shop App queries Consul for Catalogue Service location</li>
+            <li class="fragment">Restart Catalogue container, Registrator updates the entry in Consul</li>
+          </ul>
+          <br><br>
+					<img data-src="images/aa-module4-consul-registrator-4.jpg" alt="module4 consul + registrator" style="border:0">
+          <aside class="notes">
+            new ip
+          </aside>
+				</section>
+
+				<section>
+					<div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+						<h2> Challenge - Part 1/2</h2>
+					</div>
+					<br>
+					<h2>Get the catalogue and review services registered in Consul</h2><br>
+					<ol>
+						<li>View Module 4 <a target=_blank href="../topics/finish/module4/README.html">README</a> for detailed instructions </li>
+            <li>Start Consul container (on the VM):
+            <pre><code>vagrant@workshop:module4$ ./start_consul.sh</code></pre></li>
+            <li>View the Consul dashboard:
+              <a target="_blank" href="http://192.168.33.10:8500/ui"> http://192.168.33.10:8500/ui </a> </li>
+            <li>Can you see our services?</li>
+					</ol>
+          <aside class="notes">
+            nothing there yet, we all know why
+          </aside>
+				</section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2> Challenge - Part 2/2</h2>
+          </div>
+          <br>
+          <h2>Get the catalogue and review services registered in Consul</h2><br>
+          <ol>
+            <li>Start Registrator container (on the VM):</li>
+            <pre><code>vagrant@workshop:module4$ ./start_registrator.sh</code></pre></li>
+            <li>Reload the Consul dashboard: <a target="_blank" href="http://192.168.33.10:8500/ui"> http://192.168.33.10:8500/ui </a> </li>
+            <li>Can you see our services now?</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Services with names based on docker environment metadata</h2>
+            <li>If no metadata is passed, the service name will look like <strong>containername-port</strong> as <strong>catalogue-8084</strong></li>
+          <img width="800" data-src="images/aa-module4-consul-names-after.jpg" alt="module4 consul names after" style="border:0" />
+          <aside class="notes">
+            If we plan to scale the number instances per service, it would make sense to register a load-balancer
+            endpoint instead of the individual services.  That way we have a well-known entry point to a dynamic
+            number of service instances.
+          </aside>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2> Challenge</h2>
+          </div>
+          <br>
+          <h2>Lookup our services in Consul<br />using HTTP API request</h2>
+          <ol>
+            <li>Make a HTTP GET request from the command-line to see the service details including the port:
+            <pre><code content-trim class="sh">vagrant@workshop:~$ curl -s http://localhost:8500/v1/catalog/service/catalogue-service | json_pp</code></pre>
+            <pre><code content-trim class="json">[{
+  "ServiceTags" : null,
+  "ServicePort" : 8084,
+  "Address" : "192.168.33.10",
+  "ServiceID" : "registrator:catalogue:8084",
+  "Node" : "consulserver",
+  "ServiceAddress" : "",
+  "ServiceName" : "catalogue-service"
+}]</code></pre></li>
+            <li>Repeat for the <code>review</code> service
+            <pre><code content-trim class="sh">vagrant@workshop:~$ curl -s http://localhost:8500/v1/catalog/service/review-service | json_pp</code></pre>
+            <aside class="notes">
+              The shop-app is making HTTP GET requests to Consul in a similar way to fetch service emdpoints in JSON.
+            </aside>
+          </ol>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2> Challenge</h2>
+          </div>
+          <br>
+          <h2>Lookup our services in Consul<br/>using DNS query</h2>
+          <ol>
+            <li>Since Consul also provides a DNS interface, we can also lookup service endpoints like so:
+            <pre><code content-trim class="sh">vagrant@workshop:~$ dig @localhost review-service.service.consul. ANY</code></pre>
+            <pre><code content-trim class="json">; <<>> DiG 9.9.5-3ubuntu0.2-Ubuntu <<>> @localhost review-service.service.consul. ANY
+; (1 server found)
+...
+;; QUESTION SECTION:
+;review-service.service.consul.	IN	ANY
+
+;; ANSWER SECTION:
+review-service.service.consul. 0 IN	A	192.168.33.10
+
+;; Query time: 3 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+...
+}]</code></pre></li>
+            <li>Can you get the port number of the service via a DNS query?</li>
+          </ol>
+          <aside class="notes">
+            Hint: You need to make a SRV type query.  Dig defaults to a A record query.
+            By default, the TTL on the DNS results in 0 seconds.  This means you will always get
+            up-to-date records.  You can set a TTL greater than 0 seconds if you prefer.
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2> Challenge - Part 1/2</h2>
+          </div>
+          <br>
+          <h2>Update Shop App config to use correct service names</h2>
+          <ol>
+            <li>Is the <a target="_blank" href="http://localhost:8080">shop-app</a> working?</li>
+            <li>View Module 4 <a target=_blank href="../topics/finish/module4/README.html">README</a> for detailed instructions </li>
+            <li>The <code>shop-app</code> has been updated to make HTTP API calls to Consul to retrieve service endpoints (IP address + port)</li>
+            <li>However, the file <code>config.yml</code> used to configure the <code>shop-app</code> is missing some information required to lookup services in Consul correctly</li>
+            <li>Edit the <code>config.yml</code> file:
+              <pre><code>vagrant@workshop:~$ cd ~/workspace/shop-app</code></pre></li>
+              <pre><code>vagrant@workshop:shop-app$ nano config.yml</code></pre></li>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2> Challenge - Part 2/2</h2>
+          </div>
+          <br>
+          <h2>Update Shop App config to use correct service names</h2>
+          <ol>
+            <li>Edit the values for the config keys so that they look like this:
+              <pre><code content-trim class="yaml">consul: http://192.168.33.10:8500
+catalogueServiceName: catalogue-service
+reviewServiceName: review-service</code></pre></li>
+            <li> Rebuild Shop App</li>
+            <pre><code>vagrant@workshop:~$ cd ~/topics/start/module4/</code></pre>
+            <pre><code>vagrant@workshop:module4$ ./rebuild_shop_app.sh</code></pre>
+            <li>Refresh the <code>shop-app</code> in your browser: <a target="_blank" href="http://localhost:8080/">http://localhost:8080</a></li>
+            </ol>
+        </section>
+
+        <section>
+          <h2>Working Shop-App using Consul HTTP API to discover Services</h2>
+          <img data-src="images/aa-module4-working-shop-app.jpg" alt="module4 consul names after" style="border:0" />
+          <aside class="notes">
+            now we can deploy in any order<br>
+            etcd, zookeeper, HAProxy <br>
+          </aside>
+        </section>
+
+				<section>
+					<h2>Module 4 - Finish</h2>
+					<ul>
+						<li>Didn't finish in time?</li>
+						<li>Configure Module 4 in it's <strong>finish</strong> state:</li>
+						<pre><code>vagrant@workshop:~$ cd ~/topics/finish/module4</code></pre>
+						<pre><code>vagrant@workshop:module4$ ./up.sh</code></pre>
+				  </ul>
+				</section>
+
+        <section>
+					<h2>Production Environments</h2>
+					<ul>
+            <li>A real-world production environment does not usually consist of a single host running the application and services</li>
+            <li><strong>We want to:</strong>
+              <ul>
+                <li>Reduce single points of failure in the system</li>
+                <li>Increase availability of our applications and services
+                <li>Horizontally scale our applications and services</li>
+              </ul>
+            </li>
+            <li><strong>We can do this by:</strong>
+              <ul>
+                <li>Running multiple instances of each application/service behind load-balancers</li>
+                <li>Distributing our instances across multiple hosts</li>
+              </ul>
+            </li>
+          </ul>
+          <aside class="notes">
+            not ready for new year eve
+          </aside>
+				</section>
+
+        <section>
+          <h2>Production Setup</h2>
+          <img width="900" data-src="images/aa-module4-multihost-arch.jpg" alt="module4 multihost high-level arch" style="border:0">
+          <aside class="notes">
+            <strong>redundant, lb behind virtual IP</strong>
+            The load-balancers here can be considered virtual LBs.  Usually, you will run redundant multiple
+            redundant LBs behind a virtual IP for high-availability.
+            How do you map service processes to servers?  You could statically assign them to hosts.
+            If we have a scheduling mechanism for the cluster we would not need to care specifically where
+            the apps + services were running - we only care about constraints (e.g. run 2+ of these or don't
+            run thse on the same host, etc.)
+          </aside>
+        </section>
+
+        <section>
+          <h2>Multi-Host Deployment with<br/>Docker Swarm</h2>
+          <ul>
+            <li>Our <code>shop-app</code> and services run inside Docker containers</li>
+            <li>How can we deploy our Docker containers across multiple hosts?
+              <ul>
+                <li>The Docker engine running on a host can only manage containers on it's host</li>
+                <li>We need some kind of Docker-aware clustering system</li>
+              </ul>
+              <li><a href="https://docs.docker.com/swarm/" target="_blank">Docker Swarm</a> is one possible solution to this problem
+                <ul>
+                  <li>It provides native clustering for Docker</li>
+                  <li>It abstracts a pool of Docker hosts into a single, virtual host</li>
+                  <li>It presents the standard Docker API - meaning you can use existing tools, like the <code>docker</code> command-line client, to manage the cluster</li>
+                  <li>It is a "batteries included" solution but allows for swapping in more powerful backends</li>
+                </ul>
+              </li>
+            </li>
+          </ul>
+          <aside class="notes">
+            native clustering option <br>
+            pool of docker host - single virtual host <br>
+            default scheduling and filter <br>
+            Other Docker Swarm backends include Kubernetes and Mesos.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h2>Docker Swarm</h2>
+          </div>
+          <img width="900" data-src="images/aa-module4-swarm-cluster.jpg" alt="docker swarm" style="border:0" /><br/>
+          <aside class="notes">
+            swarm - multiple nodes <br>
+            talk to swarm than to node directly <br>
+            swarm decides based on ur inputs <br><br>
+            discovery service <br>
+            tcp port <br>
+            <br><br>
+            can I use in prod?, with caution <br>
+            does not support high availability <br>
+            client-server mode --- raft in future <br>
+            <br><br>
+            Normally, you'd run the swarm manager on a different host to the swarm node - we do that
+            here to reduce the number of VMs we need to run for the workshop.
+            Currently, as of v0.2.0, Docker Swarm does not support high-availability
+            with fail-over for the Swarm Manager - this is planned for a future release.
+          </aside>
+        </section>
+
+        <section data-transition="none">
+          <div>
+            <h2>Docker Swarm</h2>
+          </div>
+          <img width="900" data-src="images/aa-module4-swarm-node-manager.jpg" alt="docker swarm" style="border:0" /><br/>
+          <aside class="notes">
+            how does it know where to deploy? <br>
+            strategy + constraint <br>
+            3 options in second release <br>
+            more due in june <br>
+        </section>
+
+        <section>
+          <div>
+            <h2>Docker Swarm - Binpack Strategy</h2>
+          </div>
+          <img width="900" data-src="images/aa-module4-swarm-cluster-binpack.jpg" alt="docker swarm" style="border:0" /><br/>
+          <aside class="notes">
+            rank nodes based on cpu, memory and no of containers running <br>
+            optimise hardware <br>
+            avoid fragmenration <br>
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h2>Docker Swarm - Spread Strategy</h2>
+          </div>
+          <img width="900" data-src="images/aa-module4-swarm-cluster-spread.jpg" alt="docker swarm" style="border:0" /><br/>
+          <aside class="notes">
+            avoids risk of deploying on single host <br>
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h2>Docker Swarm - Deploy with constraints</h2>
+          </div>
+          <img width="900" data-src="images/aa-module4-swarm-cluster-constraints.jpg" alt="docker swarm" style="border:0" /><br/>
+          <aside class="notes">
+            anything under docker info <br>
+            associate labels to host when starting docker <br>
+            container, image proximity <br>
+            soft affinity <br>
+            port as resource <br>
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h2>Docker Swarm Setup on your Machine</h2>
+          </div>
+          <img width="600" data-src="images/aa-module4-swarm-cluster-on-vm.jpg" alt="docker swarm" style="border:0" /><br/>
+          <aside class="notes">
+            Normally, you'd run the swarm manager on a different host to the swarm node - we do that
+            here to reduce the number of VMs we need to run for the workshop.
+            Currently, as of v0.2.0, Docker Swarm does not support high-availability
+            with fail-over for the Swarm Manager - this is planned for a future release.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <h2>Building a Docker Swarm Cluster</h2>
+            <ul>
+              <li>You are going to build a Docker Swarm cluster with 2 VMs</li>
+              <li>The Swarm manager discovers Swarm nodes through a <a href="https://docs.docker.com/swarm/discovery/" target="_blank"><em>discovery service</em></a></li>
+              <li>The default discovery backend is a <a href="https://docs.docker.com/swarm/discovery/#using-the-hosted-discovery-service" target="_blank">publicly hosted service</a> - let's not use this</li>
+              <li><a href="https://docs.docker.com/swarm/discovery/#using-consul" target="_blank">Consul</a> is a supported discovery backend - we are already using Consul, so let's use this!</li>
+            </ul>
+          </div>
+          <ul>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Steps For Building a Docker Swarm Cluster</h2><br>
+          <ul>
+            <li>Configure Docker to listen on a TCP port for Swarm use</li>
+            <li>Setup Consul as a Swarm node discovery backend</li>
+            <li>Run Swarm manager on one VM</li>
+            <li>Run Swarm nodes on each VM</li>
+            <li>Deploy shop-app and services via Swarm manager Docker API</li>
+          </ul>
+        </section>
+
+        <section>
+          <div>
+            <h2>Step 1 - Configure Docker to listen on a TCP port for Swarm use</h2>
+          </div>
+          <img width="1200" data-src="images/aa-module4-swarm-step1.jpg" alt="docker swarm - step 1" style="border:0" /><br/>
+        </section>
+
+        <section data-transition="none">
+          <div>
+            <h2>Step 2 - Setup Consul as a Swarm node discovery backend</h2>
+          </div>
+          <img width="1200" data-src="images/aa-module4-swarm-step2.jpg" alt="docker swarm - step 1" style="border:0" /><br/>
+        </section>
+
+        <section data-transition="none">
+          <div>
+            <h2>Step 3 - Run Swarm manager on one VM</h2>
+          </div>
+          <img width="1200" data-src="images/aa-module4-swarm-step3.jpg" alt="docker swarm - step 1" style="border:0" /><br/>
+        </section>
+
+        <section data-transition="none">
+          <div>
+            <h2>Step 4 - Run Swarm nodes on each VM</h2>
+          </div>
+          <img width="1200" data-src="images/aa-module4-swarm-step4.jpg" alt="docker swarm - step 1" style="border:0" /><br/>
+        </section>
+
+        <section data-transition="none">
+          <div>
+            <h2>Step 5 - Deploy shop-app and services</h2>
+          </div>
+          <img width="1200" data-src="images/aa-module4-swarm-step5.jpg" alt="docker swarm - step 1" style="border:0" /><br/>
+        </section>
+
+        <section>
+          <h2>Steps For Building a Docker Swarm Cluster</h2><br>
+          <ul>
+            <li><strong>Configure Docker to listen on a TCP port for Swarm use</strong></li>
+            <li>Setup Consul as a Swarm node discovery backend</li>
+            <li>Run Swarm manager on one VM</li>
+            <li>Run Swarm nodes on each VM</li>
+            <li>Deploy shop-app and services via Swarm manager Docker API</li>
+          </ul>
+        </section>
+
+        <section>
+          <div>
+            <h2>Step 1 - Configure Docker to listen on a TCP port for Swarm use</h2>
+          </div>
+          <img width="1200" data-src="images/aa-module4-swarm-step1.jpg" alt="docker swarm - step 1" style="border:0" /><br/>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Step 1</h2>
+          </div>
+          <br/>
+          <h2>Configure Docker to listen on a TCP port for Swarm use on Node 1</h2>
+          <ul>
+            <li>View Module 4 <a target=_blank href="../topics/finish/module4/README.html">README</a> for detailed instructions</li>
+            <li>Prepare your existing <code>workshop</code> VM for the exercise:
+              <pre><code content-trim class="sh">vagrant@workshop:~$ cd ~/topics/finish/module4
+vagrant@workshop:module4$ ./up_swarm_multi_host.sh</code></pre>
+            </li>
+            <li>By default, the Docker engine listens on a Unix socket - we need it to listen on a TCP port to work with Swarm:
+              <pre><code content-trim class="sh">vagrant@workshop:module4$ cd swarm-scripts
+vagrant@workshop:swarm-scripts$ ./set_docker_swarm.sh
+vagrant@workshop:swarm-scripts$ source set_docker_host.sh</code></pre>
+            </li>
+            <li>Verify Docker client is working with the reconfigured Docker engine:
+              <pre><code content-trim class="sh">vagrant@workshop:swarm-scripts$ docker info</code></pre>
+            </li>
+          </ul>
+          <aside class="notes">
+            unix socket - non network <br>
+            network - TCP port - 2375 <br>
+            2376 - TLS <br>
+          </aside>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Step 1</h2>
+          </div>
+          <br/>
+          <h2>Configure Docker to listen on a TCP port for Swarm use on Node 2</h2>
+          <ul>
+            <li>Create and prepare your second VM: <code>workshop-swarm-code</code></li>
+            <li>Open a new terminal window on your local machine</li>
+            <li>Go to the location where you copied the contents from USB stick</li>
+            <li>Start and log into the <code>workshop-swarm-code</code> VM:
+            <pre><code>vagrant box add workshop-swarm-node workshop-swarm-node.box
+vagrant up
+vagrant ssh
+vagrant@workshop-swarm-code:~$</code></pre></li>
+            <li>Configure the Docker engine for Docker Swarm on VM 2:
+              <pre><code content-trim class="sh">vagrant@workshop-swarm-code:~$ cd ~/topics/finish/module4/swarm-scripts/swarm-second-node
+vagrant@workshop-swarm-code:swarm-second-node$ ./set_docker_swarm.sh
+vagrant@workshop-swarm-code:swarm-second-node$ source set_docker_host.sh
+vagrant@workshop-swarm-code:swarm-second-node$ docker info</code></pre>
+            </li>
+          </ul>
+        </section>
+
+        <section data-transition="none">
+          <h2>Steps For Building a Docker Swarm Cluster</h2><br>
+          <ul>
+            <li><strike>Configure Docker to listen on a TCP port for Swarm use</strike></li>
+            <li><strong>Setup Consul as a Swarm node discovery backend</strong></li>
+            <li>Run Swarm manager on one VM</li>
+            <li>Run Swarm nodes on each VM</li>
+            <li>Deploy shop-app and services via Swarm manager Docker API</li>
+          </ul>
+        </section>
+
+        <section>
+          <div>
+            <h2>Step 2 - Setup Consul as a Swarm node discovery backend</h2>
+          </div>
+          <img width="1200" data-src="images/aa-module4-swarm-step2.jpg" alt="docker swarm - step 2" style="border:0" /><br/>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Step 2</h2>
+          </div>
+          <br/>
+          <h2>Setup Consul as a<br/>Swarm Discovery Backend on Node 1</h2>
+          <ul>
+            <li>Start the <strong>Consul</strong> server - Swarm nodes will register themselves in Consul for discovery by the Swarm manager:
+            <pre><code content-trim class="sh">vagrant@workshop:swarm-scripts$ ./start_consulserver.sh</code></pre></li>
+            <li>Start Registrator (our <code>shop-app</code> and services will need it later):
+            <pre><code content-trim class="sh">vagrant@workshop:swarm-scripts$ ./start_registrator.sh</code></pre>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Step 2</h2>
+          </div>
+          <br/>
+          <h2>Setup Consul as a<br/>Swarm Discovery Backend on Node 2</h2>
+          <ul>
+            <li>Start Consul and Registrator on VM 2:
+            <pre><code content-trim class="sh">vagrant@workshop-swarm-code:swarm-second-node$ ./start_consulagent.sh
+vagrant@workshop-swarm-code:swarm-second-node$ ./start_registrator.sh</code></pre></li>
+            <li>At this point you should have 2 clustered Consul nodes:
+              <pre><code content-trim class="sh">vagrant@workshop-swarm-code:swarm-second-node$ ./list_consul_nodes.sh
+[{
+  "Address" : "192.168.33.11", "Node" : "consul-agent"
+ },
+ {
+  "Address" : "192.168.33.10", "Node" : "consul-server"
+}]</code></pre>
+            </li>
+          </ul>
+        </section>
+
+        <section data-transition="none">
+          <h2>Steps For Building a Docker Swarm Cluster</h2><br>
+          <ul>
+            <li><strike>Configure Docker to listen on a TCP port for Swarm use</strike></li>
+            <li><strike>Setup Consul as a Swarm node discovery backend</strike></li>
+            <li><strong>Run Swarm manager on one VM</strong></li>
+            <li>Run Swarm nodes on each VM</li>
+            <li>Deploy shop-app and services via Swarm manager Docker API</li>
+          </ul>
+        </section>
+
+        <section>
+          <div>
+            <h2>Step 3 - Run Swarm manager on one VM</h2>
+          </div>
+          <img width="1200" data-src="images/aa-module4-swarm-step3.jpg" alt="docker swarm - step 3" style="border:0" /><br/>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Step 3</h2>
+          </div>
+          <br/>
+          <h2>Run Swarm Manager on Node 1</h2>
+          <ul>
+            <li>View Module 4 <a target=_blank href="../topics/finish/module4/README.html">README</a> for detailed instructions</li>
+            <li>Head back to VM 1 - <code>workshop</code>.  We'll start the Swarm manager there:
+              <pre><code content-trim class="sh">vagrant@workshop:~$ cd ~/topics/finish/module4/swarm-scripts
+vagrant@workshop:swarm-scripts$ ./start_swarm_manage.sh</code></pre></li>
+            <li>Let's see how many nodes are in our Swarm cluster:
+              <pre><code content-trim class="sh">vagrant@workshop:swarm-scripts$ ./list_swarm_nodes.sh
+...
+Nodes: 0</code></pre></li>
+          </ul>
+        </section>
+
+        <section data-transition="none">
+          <h2>Steps For Building a Docker Swarm Cluster</h2><br>
+          <ul>
+            <li><strike>Configure Docker to listen on a TCP port for Swarm use</strike></li>
+            <li><strike>Setup Consul as a Swarm node discovery backend</strike></li>
+            <li><strike>Run Swarm manager on one VM</strike></li>
+            <li><strong>Run Swarm nodes on each VM</strong></li>
+            <li>Deploy shop-app and services via Swarm manager Docker API</li>
+          </ul>
+        </section>
+
+        <section>
+          <div>
+            <h2>Step 4 - Run Swarm nodes on each VM</h2>
+          </div>
+          <img width="1000" data-src="images/aa-module4-swarm-step4.jpg" alt="docker swarm - step 4" style="border:0" /><br/>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Step 4</h2>
+          </div>
+          <br/>
+          <h2>Run Swarm node on Node 1</h2>
+          <ul>
+            <li>Now let's join the first VM into the Swarm cluster:
+              <pre><code content-trim class="sh">vagrant@workshop:swarm-scripts$ ./join_first_swarm_node.sh</code></pre>
+            </li>
+            <li>Let's see how many nodes are in our Swarm cluster:
+              <pre><code content-trim class="sh">vagrant@workshop:swarm-scripts$ ./list_swarm_nodes.sh
+...
+Nodes: 1
+  workshop: 192.168.33.10:2375
+  ...</code></pre></li>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Step 4</h2>
+          </div>
+          <br/>
+          <h2>Run Swarm node on Node 2</h2>
+          <ul>
+            <li>Head over to VM2 - <code>workshop-swarm-code</code> and let's add that VM to the Swarm cluster:
+              <pre><code content-trim class="sh">vagrant@workshop-swarm-code:~$ cd ~/topics/finish/module4/swarm-scripts/swarm-second-node
+vagrant@workshop-swarm-code:swarm-second-node$ ./join_second_swarm_node.sh</code></pre>
+            </li>
+            <li>Can you see both the Swarm nodes listed in the Swarm cluster?
+              <pre><code content-trim class="sh">vagrant@workshop-swarm-code:swarm-second-node$ ./list_swarm_nodes.sh
+...
+Nodes: 2
+ workshop: 192.168.33.10:2375
+ ...
+ workshop-swarm-node: 192.168.33.11:2375
+ ...</code></pre></li>
+            <li>The Docker Swarm cluster is now ready for you to use</li>
+          </ul>
+        </section>
+
+        <section data-transition="none">
+          <h2>Steps For Building a Docker Swarm Cluster</h2><br>
+          <ul>
+            <li><strike>Configure Docker to listen on a TCP port for Swarm use</strike></li>
+            <li><strike>Setup Consul as a Swarm node discovery backend</strike></li>
+            <li><strike>Run Swarm manager on one VM</strike></li>
+            <li><strike>Run Swarm nodes on each VM</strike></li>
+            <li><strong>Deploy shop-app and services via Swarm manager Docker API</strong></li>
+          </ul>
+        </section>
+
+        <section>
+          <div>
+            <h2>Step 5 - Deploy Services</h2>
+          </div>
+          <img width="1000" data-src="images/aa-module4-swarm-step5.jpg" alt="docker swarm - step 5" style="border:0" /><br/>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Step 5</h2>
+          </div>
+          <br/>
+          <h2>Deploy Docker containers<br/>into the Swarm cluster</h2>
+          <ul>
+            <li>View Module 4 <a target=_blank href="../topics/finish/module4/README.html">README</a> for detailed instructions</li>
+            <li>Deploy the <code>shop-app</code> into the Swarm cluster with a <a href="https://docs.docker.com/swarm/scheduler/filter/#constraint-filter" target="_blank">Constraint Filter</a> to only run on the <code>workshop</code> node:
+              <pre><code content-trim class="sh">vagrant@workshop:~$ cd ~/topics/finish/module4/swarm-scripts
+vagrant@workshop:swarm-scripts$ ./start_shop_app.sh</code></pre></li>
+            <li>Look at how the constraint is specified when starting the container in the cluster:
+              <pre><code content-trim class="sh">vagrant@workshop:swarm-scripts$ less start_shop_app.sh
+
+# In file: start_shop_app.sh
+docker -H ${docker_tcp_host} run -d -e "constraint:node==workshop" ...</code></pre></li>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Step 5</h2>
+          </div>
+          <br/>
+          <h2>Deploy Docker containers<br/>into the Swarm cluster</h2>
+          <ul>
+            <li>Deploy the <code>review</code> and <code>catalogue</code> services into the Swarm cluster with an <a href="https://docs.docker.com/swarm/scheduler/filter/#affinity-filter" target="_blank">Affinity Filter</a> to run in any node where the <code>shop-app</code> container does not exist:
+              <pre><code content-trim class="sh">vagrant@workshop:~$ cd ~/topics/finish/module4/swarm-scripts
+vagrant@workshop:swarm-scripts$ ./start_services.sh</code></pre></li>
+            </li>
+            <li>Look at how the constraint is specified when starting the containers in the cluster:
+              <pre><code content-trim class="sh">vagrant@workshop:swarm-scripts$ less start_services.sh
+
+# In file: start_services.sh
+docker -H ${docker_tcp_host} run -d -e "affinity:container!=shop*" ... "review:latest"
+docker -H ${docker_tcp_host} run -d -e "affinity:container!=shop*" ... "catalogue:latest"
+</code></pre></li>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Step 5</h2>
+          </div>
+          <br/>
+          <h2>Deploy Docker containers<br/>into the Swarm cluster</h2>
+          <ul>
+            <li>Let's see where our containers are running
+              <pre><code content-trim class="sh">vagrant@workshop:swarm-scripts$ ./list_swarm_ps.sh
+
+            IMAGE         CREATED                             NAMES
+
+ catalogue:latest   2 minutes ago     workshop-swarm-node/catalogue
+    review:latest   2 minutes ago        workshop-swarm-node/review
+  shop-app:latest   9 minutes ago                 workshop/shop-app
+              ...             ...                               ...
+</code></pre></li>
+            <li>Verify the <code>shop-app</code> is working: <a href="http://192.168.33.10:8080" target="_blank">http://192.168.33.10:8080</a></li>
+            <li>You are now ready to scale your services and deploy to multiple hosts :)</li>
+          </ul>
+        </section>
+
+			  <section>
+					<h2>Module 4 - Wrap-up</h2>
+					<ol>
+            <li>Service discovery allows our <code>shop-app</code> and services to be location agnostic and decoupled from each other</li>
+            <li>Consul can be used as a Service Discovery tool and exposes HTTP and DNS APIs for clients</li>
+            <li>Registrator helps automate registering Docker containers into Consul for service discovery purposes</li>
+            <li>Docker Swarm is a Docker-aware cluster manager that is easy to setup and supports different discovery backends, including Consul</li>
+            <li>The Docker Swarm manager abstracts a cluster of Docker hosts into a virtual host</li>
+            <li><a href="https://docs.docker.com/swarm/scheduler/filter/">Filters</a> can be passed as metadata to Docker Swarm to influence where containers will be placed in the cluster</li>
+					</ol>
+          <aside class="notes">
+            New Year eve
+          </aside>
+				</section>
+
+				<section>
+					<h2> Module 4 - Tips and Advice</h2>
+					<ol>
+            <li>When scaling container-based services it becomes impractical to map each instance of a container statically
+            to specific hosts - use service discovery</li>
+            <li>Use Docker Swarm as your cluster manager with the default scheduling backend - other backends are only needed for very large-scale operations</li>
+            <li>Use a private discovery backend like Consul - do not use the publicly hosted discovery service</li>
+            <li>Use <a href="https://docs.docker.com/swarm/scheduler/filter/#standard-constraints" target="_blank">Constraints</a>, <a href="https://docs.docker.com/swarm/scheduler/filter/" target="_blank">Filters</a> and <a href="https://docs.docker.com/swarm/scheduler/strategy/" target="_blank">Strategies</a> to help Docker Swarm schedule your containers on your Docker hosts</li>
+            <li>Use load-balancers - like HAProxy - to scale your services</li>
+            <li>Use load-balancer endpoints for service discovery not individual service instances</li>
+            <li>Ensure your services provide healthcheck endpoints so that load-balancers can stop routing traffic to unhealthy instances</li>
+            <li>Ensure your load-balancers are not a single-point of failure</li>
+					</ol>
+          <aside class="notes">
+            start with something simple <br>
+            swarm - not prod ready - updated - next release <br>
+            swarm - raft <br>
+            no public hosted service <br>
+            load balancers - HAProxy - scale your service <br>
+            health check <br>
+            lb - single point of failure - redundant lb behind virtual IP <br>
+          </aside>
+				</section>
+
+        <section>
+          <h2>Prepare VM for next module</h2>
+          <br>
+        </pre><ul>
+          <li>Exit from workshop-swarm-node VM</li>
+            <pre><code>vagrant@workshop-swarm-node:~$ exit</code></pre>
+          <li>Destroy your workshop-swarm-node VM</li>
+            <pre><code content-trim class="sh">cd {dir-on-your-machine}/workshop-dist/box/swarm-
+vagrant destroy
+default: Are you sure you want to destroy the 'default' VM? [y/N] y
+          </code></pre>
+          <li>Exit from workshop VM</li>
+            <pre><code>vagrant@workshop:~$ exit</code></pre>
+          <li><span style="color: red">Important*</span>: Destroy and recreate your workshop VM</li>
+            <pre><code content-trim class="sh">cd {dir-on-your-machine}/workshop-dist/box
+vagrant destroy
+default: Are you sure you want to destroy the 'default' VM? [y/N] y
+vagrant up</code></pre>
+            <p style="text-align: left; font-size: 0.6em">(*) Module 4 made some changes to Docker for a multi-host setup</p>
+          </ul>
+        </section>
+
+        <!-- Module 5 -->
+
+        <section id="module-5" class="title">
+          <h1>Module 5</h1>
+          <h3>Introduction to Operational concerns</h3>
+        </section>
+
+        <section>
+          <h2>Run the Workshop VM</h2>
+          <ul>
+            <li>Log into the <code>workshop</code> VM from<br> the <code>workshop-dist/box</code> directory on your machine:</li>
+            <pre><code  content-trim class="sh">workshop-dist/box$ vagrant ssh</code></pre>
+            <li>If you are using Windows run <code>Git Bash</code> to open a terminal window then follow these steps:</li>
+              <pre><code content-trim class="sh">workshop-dist\box$ vagrant ssh</code></pre>
+              <li>Configure Module 5 in it's <strong>start</strong> state:</li>
+              <pre><code>vagrant@workshop:~$ cd ~/topics/start/module5 </code></pre>
+              <pre><code>vagrant@workshop:module5$ ./up.sh </code></pre>
+          </ul>
+        </section>
+
+        <section>
+          <h2><span style="text-transform: none;">&mu;usik updates</span></h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-problem-05.jpg" alt="µsik shop company updates 5" style="border:0">
+        </section>
+
+        <section>
+          <h2>Where are we now? </h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-05.jpg" alt="Just getting started with Single monolithic Shop-App" style="border:0">
+          <aside class = "notes">
+            impact of last weeks marketing campaign <br>
+            new users signed up after new year eve <br>
+            how did we do with algo done with PHD <br>
+            we know business is growing, but how much <br>
+            digital teams - operation dashboard <br>
+            scale services proactively - address problems beforehand <br>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Module 5 - Overview</h2>
+          <p style="text-align: left">
+            Now our <code>shop-app</code> and services are live in Production.
+            How do we keep an eye on the system health and
+            how can we make troubleshooting problems easier for both Development and Operations?
+          </p>
+          <br/>
+          <h4>You will learn about:</h4>
+          <ul>
+              <li>Centralised log aggregation and why it is important when dealing with many services across multiple hosts</li>
+              <li>Using Correlation IDs to trace logical transactions across service boundaries</a></li>
+            </code><li>Monitoring and metrics gathering for applications and services</li>
+              <li>Using dashboards as information radiators to give us a system overview at a glance</li>
+          </ul>
+          <aside class="notes">
+            There are many more Operational concerns but we do not have enough time to cover them all.  These include
+            security, auditing, archiving logs, semantic monitoring and sythentic transactions,
+            managing database migrations and backups, OS service scripts to keep containers running (e.g. systemd),
+            load-balancing, scaling, high-availability, zero-downtime deploys, business metrics, and more.
+          </aside>
+        </section>
+
+        <section>
+        <h2>Check the Shop App</h2>
+          <ul>
+             <li>Click to see your application: <a href="http://localhost:8080" target="_blank" title="http://localhost:8080">http://localhost:8080</a></li>
+             <img width="800" data-src="images/aa-module5-start-broken-ratings.jpg" alt="module5 shop app broken" style="border:0" />
+             <li>Hmm... we can't see album ratings for <code>Dark Sky Paradise</code> and <code>Cold Day In Heaven</code></li>
+             <li>How can we troubleshoot the problem?</li>
+          </ul>
+          <aside class="notes">
+            There are many ways we could troubleshoot the problem but the first place to start is
+            checking the logs for the shop-app.  This depends on proper log setup: containers write
+            logs to STDOUT/STDERR and don't swallow exceptions.
+          </aside>
+        </section>
+
+        <section>
+          <h2>Check the logs!</h2>
+          <ul>
+            <li>Docker keeps <a target="_blank" href="https://docs.docker.com/reference/commandline/cli/#logs">logs</a> for running or exited containers.
+              <pre><code content-trim class="sh">vagrant@workshop:~$ docker logs --tail="all" -f shop-app</code></pre></li>
+          <img width="800" data-src="images/aa-module5-docker-logs.jpg" alt="module5 docker logs" style="border:0" /><br/>
+          <li>Is it easy to see what is going on?</li>
+          <li>What if we want to see logs across multiple containers?</li>
+          <li>What if we have many servers to check?</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Logging Infrastructure</h2>
+          <ul>
+            <li>Start the logging infrastructure on our VM:
+            <pre><code content-trim class="sh">vagrant@workshop:~$ cd ~/topics/start/module5
+vagrant@workshop:module5$ ./start_logging.sh
+
+>>>> Public IP address of this VM: 192.168.33.10
+>>>> Kibana Web UI: http://192.168.33.10/index.html#/dashboard/file/guided.json
+>>>> Stream logs (all containers): http://192.168.33.10:8086/logs
+>>>> Stream logs (named container): http://192.168.33.10:8086/logs/name:[CONTAINER_NAME]</code></pre></li>
+            <li>This starts Docker containers running: <a target="_blank" href="https://github.com/gliderlabs/logspout">logspout</a>, <a target="_blank" href="http://www.fluentd.org/">fluentd</a>, <a target="_blank" href="https://www.elastic.co/products/elasticsearch">elasticsearch</a>, and <a target="_blank" href="https://www.elastic.co/products/kibana">kibana</a></li>
+        </section>
+
+        <section>
+          <h2>Logspout</h2>
+          <ul>
+            <li>With logspout we can stream logs from all or selected containers on a machine</li>
+            <li>Use <code>curl</code> to "tail" our logs from our <a target="_blank" href="https://github.com/gliderlabs/logspout">logspout</a> log router:
+            <pre><code content-trim class="sh">vagrant@workshop:~$ curl -s http://localhost:8086/logs</code></pre></li>
+            <li>Refresh the <code>shop-app</code> in the browser to view live container logs</li>
+            <li>Press <code>CTRL+C</code> to stop, then filter only on ERROR logs: <pre><code content-trim class="sh">vagrant@workshop:~$ curl -s http://localhost:8086/logs | grep "ERROR "</code></pre></li>
+            <li>The problems should be more visible now</li>
+            <li>We can see logs from multiple containers and we can view logs without needing to log onto the machine</li>
+            <li>However, this does not address multi-host environments</li>
+          </ul>
+          <aside class="notes">
+            Logspout can be used to ship logs to Logstash UDP or remote syslog servers.  In this workshop, however,
+            we will use fluentd to ship our logs for aggregation as it more flexible.  Logspout is useful for
+            streaming logs to the terminal.
+          </aside>
+        </section>
+
+        <section>
+          <h2>Logspout running on your VM</h2>
+          <ul>
+             <img width="840" data-src="images/aa-module5-logspout.jpg" alt="module5 logspout" style="border:0" /><br/>
+          </ul>
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section>
+          <h2>Fluentd, Elasticsearch, and Kibana</h2>
+          <ul>
+            <li>If we want to view logs from all containers running on all machines then we need to implement centralised log aggregation</li>
+            <li>The ELK (Elasticsearch Logstash Kibana) stack is a popular open-source solution to this problem</li>
+            <li>Here we are using Fluentd instead of Logstash but they are similar tools</li>
+            <li>In a multi-host environment you would run Fluentd on each host to forward logs to an Elasticsearch cluster for indexing and searching</li>
+            <li>Elasticsearch is a search server based on Lucene with full-text search and RESTful API</li>
+            <li>Kibana, a web-based dashboard, could then be used for querying and analysing the data in Elasticsearch - in our case the data are logs</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Log aggregation running<br/>on your VM</h2>
+          <ul>
+             <img width="700" data-src="images/aa-module5-log-aggregation.jpg" alt="module5 log aggregation" style="border:0" /><br/>
+             <li>Click to see Kibana interface: <a href="http://192.168.33.10" target="_blank">http://192.168.33.10</a></li>
+          </ul>
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section>
+        <h2>Using Kibana</h2>
+          <ul>
+            <li>Kibana presents a centralised view of logs aggregated from your apps and services; regardless of where they are located</li>
+            <li>View the Kibana <a target="_blank" href="http://192.168.33.10/index.html#/dashboard/file/guided.json">Sample Dashboard</a></li>
+            <li>In the <code>Documents</code> pane, check <code>@timestamp</code>, <code>_type</code>, and <code>log</code> to only display those log fields</li>
+            <img width="800" data-src="images/aa-module5-kibana-documents2.jpg" alt="module5 kibana docs" style="border:0" /><br/>
+            <li>Enter queries (using <a target="_blank" href="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query syntax</a>) in the <code>Query</code> field</li>
+            <img width="400" data-src="images/aa-module5-query-area.jpg" alt="module5 kibana query area" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2> Challenge - Part 1/2</h2>
+          </div>
+          <br>
+          <h2>Use Kibana to find errors</h2>
+          <ol>
+            <li>View Module 5 <a target=_blank href="../topics/finish/module5/README.html">README</a> for detailed instructions
+            <li>View only <code>Review</code> service error logs by typing the following into the <code>Query</code> field:
+              <pre><code>_type:"review" AND log:"*ERROR*"</code></pre>
+              and press <code>ENTER*</code></li>
+            <li>Expand one of the <code>review</code> error logs and copy the <code>CorrelationId</code></li>
+            <li>Show errors for a specific <code>shop-app</code> initiated request:
+              <pre><code>log:"*[CorrelationId=u7ukaxkzt8hj]*" AND log:"*ERROR*"</code></pre></li>
+            <p style="text-align: left; font-size: 0.6em">(*) You may need to reload the Musik Shop page in your browser to generate logs</p>
+          </ol>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2> Challenge - Part 2/2</h2>
+          </div>
+          <br>
+          <h2>Use Kibana to find errors</h2>
+          <ol>
+            <li>We should now see the errors more clearly</li>
+            <img width="600" data-src="images/aa-module5-kibana-error1.jpg" alt="module5 kibana error 1" style="border:0" /><br/>
+            <img width="600" data-src="images/aa-module5-kibana-error2.jpg" alt="module5 kibana error 2" style="border:0" /><br/>
+          </ol>
+        </section>
+
+        <section>
+          <h2>About Correlation IDs</h2>
+          <ul>
+            <li>In the previous challenge, we saw that our client, <code>shop-app</code>, generated and passed a <a target="_blank" href="http://java.dzone.com/articles/implementing-correlation-ids-0">Correlation ID</a> to downstream services</li>
+            <li>In a more complex system, we may have a hierachy of services: i.e. services calling services</li>
+            <li>At each level in the request hierachy a new Correlation ID is generated and associated with previous parent Correlation ID</li>
+            <li>These Correlation ID tuples (e.g. <code>[CorrelationId=123,ABC,456]</code>) could be passed via HTTP headers and printed in logs. This facilitates tracing
+              of distributed transactions through the system</lial>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Hierachical Correlation IDs</h2>
+          <ul>
+            <img width="" data-src="images/aa-module5-correlation-ids.jpg" alt="module5 kibana error 1" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Module 5 - Finish</h2>
+          <br>
+          <ul>
+            <li>Didn't finish in time?</li>
+            <li>Configure Module 5 in it's <strong>finish</strong> state:</li>
+            <pre><code>vagrant@workshop:~$ cd ~/topics/finish/module5</code></pre>
+            <pre><code>vagrant@workshop:module5$ ./up.sh </code></pre>
+            <li>In the next part of this module we will not be using log aggregation</li>
+            <li>Stop log aggregation to free up memory on your VM:
+              <pre><code>vagrant@workshop:~$ cd ~/topics/finish/module5 </code></pre>
+              <pre><code>vagrant@workshop:module5$ ./stop_logging.sh </code></pre></li>
+            </ul>
+        </section>
+
+        <section>
+          <h2>Monitoring and Metrics</h2>
+          <ul>
+            <li>We will now examine monitoring the health of our <code>shop-app</code> and services and also gathering system and application metrics</li>
+            <li>Configure the VM for Monitoring and Metrics:
+              <pre><code>vagrant@workshop:~$ cd ~/topics/finish/module5 </code></pre>
+              <pre><code>vagrant@workshop:module5$ ./start_monitoring.sh </code></pre></li>
+            <li>This starts Docker containers for:
+              <ol>
+                <li><a target="_blank" href="http://prometheus.io/">Prometheus server</a></li>
+                <li><a target="_blank" href="https://registry.hub.docker.com/u/prom/container-exporter/">Container Exporter</a></li>
+                <li><a target="_blank" href="https://registry.hub.docker.com/u/prom/consul-exporter/">Consul Exporter</a></li>
+                <li><a target="_blank" href="http://prometheus.io/docs/visualization/promdash/">PromDash</a> (Prometheus Dashboard)</li>
+                <li>sqlite3 (Database for PromDash)</li>
+                <li><a target="_blank" href="https://registry.hub.docker.com/u/prom/alertmanager/">Prometheus Alertmanager</a></li>
+              </ol>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Monitoring System</h2>
+          <ul>
+            <li>We will be using <a href="http://prometheus.io/" target="_blank">Prometheus</a> as our monitoring and metrics solution</li>
+            <li>Prometheus uses a pull model over HTTP to collect metrics* in a special format</li>
+            <li>You can either directly instrument your services using one of the provided <a href="http://prometheus.io/docs/instrumenting/clientlibs/" target="_blank">client libraries</a> or use one of the metrics <a href="http://prometheus.io/docs/instrumenting/exporters/" target="_blank">exporters</a></li>
+            <li>When running multiple containers we do not want to couple the monitoring server to each container's health/metrics endpoint</li>
+            <li>Consul supports <a href="https://www.consul.io/intro/getting-started/checks.html" target="_blank">checking health status</a> on services - our services are already known to Consul (via Registrator)</li>
+            <li>We can make use of the <a href="https://github.com/prometheus/consul_exporter" target="_blank">Consul Exporter</a> to get our service health checks out of Consul and into Prometheus</li>
+            <small style="padding-top : 20px">(*) A <a href="http://prometheus.io/docs/instrumenting/pushing/" target="_blank">push model</a> is supported via an intermediary gateway</small>
+          </ul>
+          <aside class="notes">
+            A push model can be easier to sertup and less intrusive as it does not require your services to run scripts for pushing
+            data to a central server.
+          </aside>
+        </section>
+
+        <section>
+          <h2>Service Health Checks</h2>
+          <ul>
+            <li>Where are our service healthcheck endpoints?</li>
+              <ul>
+                <li>It is considered good practice to expose service health and metrics for all services on well-known endpoints</li>
+                <li>Our <code>shop-app</code> and services are using the <a href="http://www.dropwizard.io/" target="_blank">Dropwizard</a> framework which provides a standard set of administration endpoints</li>
+                <li>Open the <code>shop-app</code> admin page (<a target="_blank" href="http://localhost:8081" targe"_blank"><code>http://localhost:8081</code></a>) in your browser and click on the available endpoints</li>
+                <li>The <a href="http://localhost:8081/healthcheck" target="_blank"><code>/healthcheck</code></a> endpoint is the one we want for monitoring health</li>
+              </ul>
+            </li>
+            <li>How can we tell Consul to run service health checks?</li>
+              <ul>
+                <li><a href="https://github.com/gliderlabs/registrator" target="_blank">Registrator</a> can inform Consul about our service healthcheck endpoints via <a href="https://github.com/gliderlabs/registrator#consul-health-checks" target="_blank">additional metadata</a></li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Monitoring with Prometheus</h2>
+          <ul>
+            <img width="840" data-src="images/aa-module5-monitoring.jpg" alt="module5 monitoring" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Exporting Metrics from Hosts</h2>
+          <ul>
+            <img width="" data-src="images/aa-module5-monitoring-metrics.jpg" alt="module5 monitoring" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge</h2>
+          </div>
+          <br/>
+          <h2>Examine service health checks</h2>
+          <ol>
+            <li>View Module 5 <a target=_blank href="../topics/finish/module5/README.html">README</a> for detailed instructions</li>
+            <li>Examine the <code>shop-app</code> <a href="http://localhost:8081/healthcheck" target="_blank"><code>/healthcheck</code></a></li>
+            <li>Examine the <code>review</code> <a href="http://localhost:8083/healthcheck" target="_blank"><code>/healthcheck</code></a></li>
+            <li>Examine the <code>catalogue</code> <a href="http://localhost:8085/healthcheck" target="_blank"><code>/healthcheck</code></a></li>
+            <li>Examine <a href="http://localhost:8500/ui/#/dc1/nodes/consulserver" target="_blank">Consul server UI</a> to see the registered health checks</li>
+            <li>Examine the <code>run.sh</code> script to see how healthchecks are passed via Registrator metadata:
+              <pre><code content-trim class="sh">vagrant@workshop:~$ cd ~/topics/finish/module5
+vagrant@workshop:module5$ less run.sh</code></pre></li>
+              <pre><code content-trim class="sh"># In file: ~/topics/finish/module5/run.sh
+docker run -d -p 8082:8082 -p 8083:8083 --name review --hostname review \
+-e "SERVICE_8082_NAME=review-service" \
+-e "SERVICE_8083_NAME=review-service-admin" \
+-e "SERVICE_8083_CHECK_HTTP=/healthcheck" \
+-e "SERVICE_8083_CHECK_INTERVAL=5s" \
+review:latest</code></pre></li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Consul Server Healthchecks</h2>
+          <ul>
+            <img width="" data-src="images/aa-module5-consul-healthchecks.jpg" alt="module5 consul healthchecks" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 1/2</h2>
+          </div>
+          <br/>
+          <h2>Exploring Prometheus Server</h2>
+          <ol>
+            <li>View Module 5 <a target=_blank href="../topics/finish/module5/README.html">README</a> for detailed instructions</li>
+            <li>Open the Prometheus server UI at <a href="http://localhost:9090" target="_blank">http://localhost:9090</a></li>
+            <ul>
+              <li>Scroll to the <code>Targets</code> section</li>
+              <li>Can you identify what each target represents?</li>
+              <li>Scroll to the <code>Rules</code> section</li>
+              <li>What do you think these rules represent?</li>
+            </ul>
+            <li>Click on the <a href="http://localhost:9090/alerts" target="_blank">Alerts</a> link in the top navigation bar</li>
+            <ul>
+              <li>Is everything looking good?</li>
+              <li>Click on one of the rows in the <a href="http://localhost:9090/alerts" target="_blank">Alerts</a> page</li>
+              <li>Can you see the corresponding rule for the alert?</li>
+            </ul>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Prometheus Alerts</h2>
+          <ul>
+            <img width="" data-src="images/aa-module5-alerts.jpg" alt="module5 kibana error 1" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 2/2</h2>
+          </div>
+          <br/>
+          <h2>Exploring Prometheus Server</h2>
+          <ol>
+            <li>Click on the <a href="http://localhost:9090/graph" target="_blank">Graph</a> link in the top navigation bar</li>
+            <li>Explore different available metrics</li>
+            <li>Which metrics do you think came from the Consul and Container Exporters?</li>
+            <li>Which metric shows memory usage for our Docker containers?</li>
+            <li>Limiting the metric to only the <code>shop-app</code> container (hint: append <code>{name="shop-app"}</code> to the metric)</li>
+            <li>How do you see a <a target="_blank" href="http://localhost:9090/graph#graph0">graphical view</a> of the metric for last 15m?</li>
+            <li>Can you add more graphs to show memory usage for review and catalogue containers?</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Prometheus Ad-hoc Metric Graphs</h2>
+          <ul>
+            <img width="" data-src="images/aa-module5-graph-metrics.jpg" alt="module5 graph metrics" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <h2>(Optional) Prometheus Alertmanager</h2>
+          <ul>
+            <li>The <a href="https://github.com/prometheus/alertmanager" target="_blank">Alertmanager</a> is an optional component that receives alerts generated by Prometheus server</li>
+            <li>This component is useful for:
+              <ul>
+                <li>Manual silencing of specific alerts</li>
+                <li>Aggregating alerts</li>
+                <li>Inhibiting alerts based on alert dependencies</li>
+                <li>Handling repeated notifications</li>
+                <li>Sending alert notifications via external services, e.g. email, PagerDuty, Slack, HipChat, etc.</li>
+              </ul>
+            </li>
+            <li>Prometheus pushes only firing alerts to Alertmanager, and if there is no update for 5 minutes the alerts will be expired</li>
+            <li>Have a look at the <a href="http:/localhost:9093/alerts" target="_blank"> Alertmanager dashboard</a></li>
+            <li>We will not be focusing on the Alertmanager in this workshop but it is a component you would likely want to use in Production</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Operations Dashboards</h2>
+          <ul>
+            <li>Once we start to have many sources of useful information (e.g. monitoring, metrics, graphs, etc) it becomes difficult to consume</li>
+            <li>A visual dashboard provides a summary of important information from different sources at a glance</li>
+            <li>What is the most useful information we should know about right now?</li>
+            <li>Candidates:
+              <ul>
+                <li><strong>Application health and status</strong> - are our apps and services up?</li>
+                <li><strong>Error counts and trends</strong></li>
+                <li><strong>Resource usage and trends</strong> - can we identify problems before they occur?</li>
+                <li><strong>Overall available capacity</strong> - disk, CPU, memory, network bandwidth</li>
+                <li><strong>Number of deploys, deployed versions, response times</strong>, etc.</li>
+                <li><strong>Business metrics</strong> - signups, purchases, click-throughs, etc.</li>
+              </ul>
+            </li>
+          </ul>
+          <aside class="notes">
+            We mashup dashboards from sources like Graphite, Kibana/Logstash, Prometheus, etc.  Some tools,
+            like PromDash provide ways to build custom dashboards without writing code.  Other tools,
+            like Dashing framework allow you to create your own custom dashboards by writing code.
+          </aside>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 1/4</h2>
+          </div>
+          <br>
+          <h2>Create a Custom Dashboard</h2>
+          <ol>
+            <li>View Module 5 <a target=_blank href="../topics/finish/module5/README.html">README</a> for detailed instructions</li>
+            <li><a href="http://prometheus.io/docs/visualization/promdash/" target="_blank">PromDash</a> is a dashboard builder for Prometheus</li>
+            <li>View PromDash by browsing to: <a href="http://localhost:3000/" target="_blank">http://localhost:3000</a></li>
+            <li>Click the <a href="http://localhost:3000/servers" target="_blank">Servers</a> link in the top navigation bar
+              <ul>
+                <li>Create a <code>New Server</code> with name <code>Prometheus</code> and URL <code><a href="http://localhost:9090" target="_blank">http://localhost:9090</a></code></li>
+              </ul>
+            </li>
+            <li>Click the <a href="http://localhost:3000/directories" target="_blank">Dashboards</a> link in the top navigation bar
+              <ul>
+                <li>Create a new <code>Directory</code> with name <code>Workshop</code></li>
+                <li>Create a new <code>Dashboard</code> with name <code>Apps and Services</code> in the <code>Workshop</code> directory</li>
+              </ul>
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 2/4</h2>
+          </div>
+          <br>
+          <h2>Create a Custom Dashboard</h2>
+          <ol>
+            <li>On the new dashboard:
+              <ul>
+                <li>Set the time range to <code>15m</code></li>
+                <li>Change refresh interval from <code>Never</code> to <code>every 30s</code></li>
+              </ul>
+            </li>
+            <li>Configure current widget to display container memory usage
+              <ul>
+                  <img width="" data-src="images/aa-module5-dashboard-datasources.jpg" alt="module5 dashboard datasources" style="border:0" /></li>
+                  <li>Click <code>Add Expression</code> and enter the expression: <code>container_memory_usage_bytes{name="shop-app"}</code> then press <code>ENTER</code></li>
+              </ul>
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 3/4</h2>
+          </div>
+          <br>
+          <h2>Create a Custom Dashboard</h2>
+          <ol>
+            <li>Configure current widget to display container memory usage (continued...)
+              <ul>
+                  <li>Add more expressions for including review and catalogue services memory usage</li>
+                  <li>Close the <code>Datasources</code> popup dialog</li>
+                  <li>Click the <code>Graph and axis settings</code> icon</li> (two from right of <code>Datasources</code> icon in <code>Title</code> hover menu)
+                  <li>Enter a <code>Graph Title</code> like <code>Container Memory Usage</code></li>
+              </ul>
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Dashboard with Container Memory Usage</h2>
+          <ul>
+            <img width="" data-src="images/aa-module5-dashboard-container-memory.jpg" alt="module5 container memory usage" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 4/4</h2>
+          </div>
+          <br>
+          <h2>Create a Custom Dashboard</h2>
+          <ol>
+            <li>Let us add our alerts to the dashboard
+              <ul>
+                <li>Click <code>Add Frame</code> (at the bottom of page) and enter the URL to Prometheus alerts: <a href="http://localhost:9090/alerts">http://localhost:9090/alerts</a></li>
+              </ul>
+            </li>
+            <li>Let us add our Alertmanager to the dashboard
+              <ul>
+                <li>Click <code>Add Frame</code> (at the bottom of page) and enter the URL to Alertmanager: <a href="http://localhost:9093">http://localhost:9093</a></li>
+              </ul>
+            </li>
+            <li>Tweak the <code>Dashboard Settings</code> (click the gear icon) and try changing the number of columns and aspect ratio</li>
+            <li>You can zoom* your browser page to make the dashboard fit on screen</li>
+            <li>Remember to <code>Save Changes</code> so you do not lose your hard work!</li>
+            <small style="padding-top : 20px">(*) CTRL and +/- on Windows; CMD and +/- on Mac</small>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Completed Dashboard</h2>
+          <ul>
+            <img width="" data-src="images/aa-module5-dashboard-final.jpg" alt="module5 final dashboard" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 1/3</h2>
+          </div>
+          <br>
+          <h2>Monitoring a Service Failure</h2>
+          <ol>
+            <li>ViewModule 5 <a target=_blank href="../topics/finish/module5/README.html">README</a> for detailed instructions</li>
+            <li>Let's simulate a failure by stopping the <code>catalogue</code> service:
+              <pre><code>vagrant@workshop:~$ docker stop catalogue</code></pre></li>
+            <li>Have a look at your dashboard - see anything interesting?</li>
+            <li>The following alerts should be firing (alerts will go from <code>pending</code> to <code>firing</code> state after 30s):</li>
+              <ul>
+                <li>ShopAppUnhealthy</li>
+                <li>CatalogueServiceDown</li>
+              </ul></li>
+            <li>At this point, our pager has probably started buzzing!</li>
+            <li>We know the root cause is the <code>catalogue</code> service being down - later we could examine logs but the first priority is to restore service</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Catalogue Service is Down</h2>
+          <ul>
+            <img width="1024" data-src="images/aa-module5-catalogue-service-down.jpg" alt="module5 catalogue service down" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 2/3</h2>
+          </div>
+          <br>
+          <h2>Monitoring a Service Failure</h2>
+          <ol>
+            <li>Let's silence the <code>CatalogueServiceDown</code> alert to let people know we are looking into the problem</li>
+            <ul>
+              <li>Browser to the Alertmanager at: <a href="http://localhost:9093" target="_blank">http://localhost:9093</a></li>
+              <li>Click on <code>Silence Alert</code> in the <code>CatalogueServiceDown</code> row</li>
+              <li>Take the ownership for the event by entering your name and a comment (default period is 1 hour - change this if you like)</li>
+              <li>Click <code>Create Silence</code> to activate the silencing of the alert</li>
+            </ul>
+            <li>Click the <code>Silences</code> tab in the top navigation bar to see a list of current alert silences</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Silencing an alert</h2>
+          <ul>
+            <img width="" data-src="images/aa-module5-alertmanager-alerts.jpg" alt="module5 alertmanager silence alert" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Create the Silence</h2>
+          <ul>
+            <img width="" data-src="images/aa-module5-alertmanager-create-silence.jpg" alt="module5 alertmanager create silence service down" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Viewing active silences</h2>
+          <ul>
+            <img width="" data-src="images/aa-module5-alertmanager-silences.jpg" alt="module5 alertmanager silences" style="border:0" /><br/>
+          </ul>
+        </section>
+
+        <section>
+          <div style="background-color: rgb(239, 91, 161) ; padding: 5px;">
+            <h2>Challenge - Part 3/3</h2>
+          </div>
+          <br>
+          <h2>Monitoring a Service Failure</h2>
+          <ol>
+            <li>Let us take corrective action
+            <ul>
+              <li>On your VM, start the <code>catalogue</code> service:
+                <pre><code>vagrant@workshop:~$ docker start catalogue</code></pre>
+              </li>
+            </ul></li>
+          <li>View your custom dashboard:
+            <ul>
+              <li>The alerts in the Prometheus Alerts tab should be cleared (from red back to green)</li>
+              <li>The alerts in the Alertmanager will be removed automatically after about 5 mins (or you can silence the alerts with a comment of "resolved" in the meantime)</li>
+            </ul>
+          </li>
+
+          </ol>
+        </section>
+
+        <section>
+          <h2>Module 5 - Wrap-up</h2>
+          <ol>
+            <li>Examined different ways to get at Docker logs for our applications and services</li>
+            <li>Diagnosed a service problem through centralised log aggregation by using Kibana</li>
+            <li>Brief overview of Correlation IDs and how can they help in troubleshooting issues across service boundaries</li>
+            <li>Saw how exposing <code>/healthcheck</code> endpoint on our <code>shop-app</code> and services made it easier to monitor their health</li>
+            <li>Examined one possible monitoring and metrics solution that helped us deal with a service outage</li>
+            <li>Built a custom dashboard for showing us the health of our system at a glance</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Module 5 - Tips and Advice</h2>
+          <ol>
+            <li>Log aggregation, monitoring and other operational concerns should be planned into development work early on - not bolted on as an afterthought</li>
+            <li>Standardise on healthcheck, metrics and other endpoints for your services to simplify monitoring configuration</li>
+            <li>Standardise on log structure and formats to help in log aggregation and analysis tasks</li>
+            <li>Implement <a href="http://www.thoughtworks.com/radar/techniques/semantic-monitoring" target="_blank">semantic monitoring</a> by running key user journeys in Production with synthetic transactions</li>
+            <li>Build custom dashboards for specific audiences that summarise the most important information they care about</li>
+            <li>Make dashboards visible, e.g. display on a big TV screen or project onto the wall</li>
+            <li>Get development and operations people working together</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Where are we now?</h2>
+          <img width="1400" data-src="images/workshop-journey/aa-journey-06.jpg" alt="Just getting started with Single monolithic Shop-App" style="border:0">
+        </section>
+
+        <!-- Module 6 -->
+
+        <section id="module-6" class="title">
+          <h1>Module 6</h1>
+          <h3>Next Steps, Future Trends and Q&amp;A</h3>
+        </section>
+
+        <section>
+          <h2>First Steps</h2>
+          <span>Congratulations!  You've made it to the end :)</span><br/>
+          <p>
+            <h4>What now?</h4>
+            <ol>
+              <li>Go back over the workshop material on your own: scripts, CD pipeline configuration, the source code for the app, services, etc.</li>
+              <li>Read through the linked references (in the slides and READMEs)</li>
+            </ol>
+          </p>
+          <p>
+            <h4>Start small...</h4>
+            <ol>
+              <li>Extract or build a small, low-risk service first</li>
+              <li>Dockerise your service</li>
+              <li>Start with a single Docker host and automate everything needed to build it from scratch</li>
+              <li>Setup your own basic CD pipeline to deploy your service to production</li>
+            </ol>
+          </p>
+          <aside class="notes">
+            quick reminder - copyright <br>
+            push into direction - strong complelling - based on needs <br>
+            where do we start - similar to how we started day <br>
+            start small - low risk - review over catalogue <br>
+            end to end <br>
+            into actual prod <br>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Next Steps...</h2>
+          <span>Successful adoption of Microservices depends on some <a href="http://martinfowler.com/bliki/MicroservicePrerequisites.html" target="_blank">prerequisites</a> like rapid server provisioning, basic monitoring, automated deployment pipelines, and embracing a DevOps culture</span><br/>
+          <p>
+            <h4>Advice</h4>
+            <ol>
+              <li>Get log aggregation and monitoring in place early</li>
+              <li>Only look at a cluster management once when you understand Docker and it's edge-cases properly</li>
+              <li>You probably won't need advanced schedulers like Mesos and Kubernetes for your Enterprise apps just yet - use Docker Swarm  with it's "batteries included" to start with</li>
+              <li><strong>WARNING</strong>: Docker is still evolving and the ecosystem is immature
+                <ul>
+                  <li>Avoid being locked into a technology which is too intrusive or too opinionated</li>
+                  <li>If it's the wrong choice it's hard to back out; let the dust settle, see which front-runners emerge</li>
+                </ul>
+              </li>
+            </ol>
+          </p>
+          <aside class="notes">
+            diff bw adoption & successful adoption <br>
+            following saying, software is useful <br>
+            automated deployemnt <br>
+            immutable deployment - portablity bw dev & prod <br>
+            rapid server provisioning <br>
+            before first service - log & monitor <br>
+            empowered teams & accountability <br><br>
+            tools - chose the one fits the best <br>
+            mesos & kubernes <br>
+            though containers have been around for a while, docker is still quite new <br>
+            rapidly evolving <br>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Future Trends</h2>
+          <p>
+            <h4>Continuous Delivery</h4>
+            <ol>
+              <li>Continuous Delivery becoming the normal way of doing business</li>
+              <li>Long-lived, cross-functional, product-aligned teams who own the entire software lifecycle</li>
+              <li>DevOps culture</li>
+            </ol>
+          </p>
+          <p>
+            <h4>Microservices</h4>
+            <ol>
+              <li>Use of lightweight SOA within an organisation - moving away from heavyweight ESBs</li>
+              <li>Teams share business functions via well-defined service-oriented APIs - not shared libraries</li>
+              <li>Decentralised governance: Teams can use the right tool for the job rather than being forced to use some Enterprise-wide standard</li>
+              <li><a href="http://www.thoughtworks.com/insights/blog/scaling-microservices-event-stream" target="_blank">Event-driven architectures</a> - business process integration via choreography over orchestration</li>
+            </ol>
+          </p>
+          <aside class="notes">
+            cd is norm - at least CI <br>
+            product than project <br>
+            create it - it's your child - you own it <br>
+            dev-ops <br><br>
+            industry moving away from heavy-weight esb <br>
+            often esb are stuffed with all possible conflicing business rules <br>
+            component sharing is more at service level than lib <br>
+            ipc any more <br>
+            calls could fail  - no, will fail<br>
+            to the point where we started - innovation <br>
+            just not technical innovation - business <br><br><br>
+            services - assumption - means request & response <br>
+            distributed systems - power of asynchronous <br>
+            kafka - unified log - AWS lambda (short lived services) <br>
+            kafka - distributed - immutable - audited <br>
+            register for workshop - event - <br>
+            shift towards business use case - than technical service orchestration <br><br>
+            Decentralised governance: It makes sense to standardise on some cross-cutting concerns like logging, security, monitoring, etc.
+            Event-driven architectures: Loose coupling, more scalable, better handling of failures - retry/resume business process; AWS Lambda
+          </aside>
+        </section>
+
+        <section>
+          <h2>Future Trends</h2>
+          <p>
+            <h4>Docker / Application Containers</h4>
+            <ul>
+              <li>Rise of lightweight-containers over full virtualisation (VMs)</li>
+              <li>Container schedulers as building blocks for more advanced use-cases</li>
+              <li>Service discovery via DNS</li>
+              <li>Docker alternatives: e.g. App Container spec - <a href="https://github.com/coreos/rkt" target="_blank">rkt</a>; <a href="http://www.ubuntu.com/cloud/tools/lxd" target="_blank">LXD</a>; Microsoft <a href="http://research.microsoft.com/en-us/projects/drawbridge/" target="_blank">Drawbridge</a></li>
+              <li>Docker Machine, Docker Compose, Docker Swarm</li>
+              <li>Docker Networking improvements: overlay-networking, Docker libnetwork</li>
+            </ul>
+          </p>
+          <aside class="notes">
+            Container schedulers: Kubernetes, Mesos
+            Overlay-networking: flannel, weave, libnetwork
+            Service discovery: Consul, Registrator, SkyDNS, WeaveDNS, etc.
+          </aside>
+        </section>
+
+        <section>
+          <h2>Future Trends</h2>
+          <p>
+            <h4>Virtualisation and Cloud</h4>
+            <ul>
+              <li>Cloud uptake continues to grow and adoption becomes the norm</li>
+              <li>Changing architectures: Horizontal scaling, event-driven, microservices, design for failure, optimise for MTTR (mean-time to recover) over MTBF (mean-time between failures)</li>
+              <li>SDN (Software-Defined Networking) and NFV (Network Function Virtualisation)</li>
+              <li>Storage virtualisation and services</li>
+            </ul>
+          </p>
+          <aside class="notes">
+            Rise of lightweight-containers over full virtualisation (VMs) - everyone is jumping onto the bandwagon: Google, IBM, RedHat, VMware, Intel, CoreOS, AWS, even Microsoft!
+            Containerisation: Docker - and on Windows!, appc, Hyper-V Containers (Windows), etc.
+            MTTR: Simian army - Netflix
+            Storage virtualisation and services - AWS: S3, DynamoDB, EBS, RDS, Redshift; Ceph, GlusterFS
+          </aside>
+        </section>
+
+        <section>
+          <h2>Future Trends</h2>
+          <p>
+            <h4>Other related trends</h4>
+            <ol>
+              <li>Shift to commodity hardware and software-based functions over specialised hardware appliances</li>
+              <li>Open-source is the leading edge: Commercially-funded open-source model with paid versions packaged extra features or premium support</li>
+              <li>Immutable infrastructure: baked VM images (AMIs), container images, rebuild - not update</li>
+              <li>Lightweight and atomically updatable OSes for microservice/container use-cases</li>
+            </ol>
+          </p>
+          <aside class="notes">
+            Commercially-funded open-source model: Mesosphere, OpenShift v3, Kismatic, etc.
+            Lightweight OSes: CoreOS, RHEL Atomic Host, Snappy Ubuntu Core, VMware Photon, Intel ClearLinux, Windows Nano Server, etc.
+          </aside>
+        </section>
+
+        <section>
+          <h2>Feedback forms</h2>
+          <h2>Q&amp;A,</h2>
+        </section>
+
+				<section>
+  				<h2> The End </h2>
+				</section>
+
+        <!-- END OF TUTORIAL SLIDES -->
+
+      </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true },
+          { src: 'plugin/notes/notes.js', async: true }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
